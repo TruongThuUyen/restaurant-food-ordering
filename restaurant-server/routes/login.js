@@ -1,16 +1,13 @@
 var express = require('express');
 require('dotenv').config();
 var router = express.Router();
-const ImageTemporary = require('../models/Images');
+const User = require('../models/User');
 
-/* GET images temporary */
+/* Check user logining */
 router.get('/', async (req, res) => {
   try {
-    const images = await ImageTemporary.find(); //get all images
-    res.status(200).json({
-      success: true,
-      data: images,
-    });
+    const users = await User.find(); //get all
+    res.json(users.length); // return a JSON
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error when get comments' });
