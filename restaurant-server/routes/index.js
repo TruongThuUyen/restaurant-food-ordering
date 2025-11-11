@@ -1,15 +1,15 @@
 var express = require('express');
 require('dotenv').config();
 var router = express.Router();
-const ImageTemporary = require('../models/Images');
+const Product = require('../models/Products');
 
-/* GET images temporary */
-router.get('/', async (req, res) => {
+/* GET products */
+router.get('/api/products', async (req, res) => {
   try {
-    const images = await ImageTemporary.find(); //get all images
+    const products = await Product.find();
     res.status(200).json({
       success: true,
-      data: images,
+      data: products,
     });
   } catch (error) {
     console.error(error);
