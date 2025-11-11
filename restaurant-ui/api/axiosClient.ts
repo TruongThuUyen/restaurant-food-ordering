@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { STORAGE, getLocalStorage, removeLocalStorage } from '@/utils/storage';
 
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+console.log('NEXT_PUBLIC_BASE_URL', BASE_URL);
 
 const getToken = () => {
   const userToken = getLocalStorage(STORAGE.USER_TOKEN);
@@ -13,7 +14,7 @@ const requestConfig = {
   timeout: 10000, // 10s
 };
 
-const request = axios.create(requestConfig);
+const AxiosClient = axios.create(requestConfig);
 
 // Request Interceptor
 const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
@@ -64,6 +65,6 @@ const onErrorResponse = (error: AxiosError | Error): Promise<AxiosError> => {
   return Promise.reject(error);
 };
 
-request.interceptors.request.use(onRequest, onErrorResponse);
-request.interceptors.response.use(onResponse, onErrorResponse);
-export default request;
+AxiosClient.interceptors.request.use(onRequest, onErrorResponse);
+AxiosClient.interceptors.response.use(onResponse, onErrorResponse);
+export default AxiosClient;

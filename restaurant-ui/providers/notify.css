@@ -1,0 +1,28 @@
+.notify-wrapper {
+  transform: translateY(0);
+  animation: slide-in 1.5s ease-in-out forwards;
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.slide-out {
+  animation: slide-out 0.7s ease-in-out forwards;
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
