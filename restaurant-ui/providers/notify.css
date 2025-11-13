@@ -1,6 +1,6 @@
 .notify-wrapper {
   transform: translateY(0);
-  animation: slide-in 1.5s ease-in-out forwards;
+  animation: slide-in 1s ease-in-out forwards;
 }
 
 @keyframes slide-in {

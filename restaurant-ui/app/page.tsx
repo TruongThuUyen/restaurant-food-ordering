@@ -4,26 +4,38 @@ import { getProducts } from '@/api/products';
 import Featured from '@/components/Featured';
 import Offer from '@/components/Offer';
 import Slider from '@/components/Slider';
+import { Product } from '@/models/Product';
 import { useNotify } from '@/providers/NotifyProvider';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { notify } = useNotify();
+  const [products, setProducts] = useState<Product[] | []>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await getProducts();
+      let response;
+      try {
+        response = await getProducts();
+        setProducts(response.data); //slice(0, response?.data?.length - 3)
+        notify('fetching data successfully', 'success');
+      } catch (error: { status: number; message: string } | unknown) {
+        let message = 'Failed to fetch data. Please try again later.';
+
+        if (typeof error === 'object' && error && 'message' in error) {
+          message = (error as { message: string }).message;
+        }
+        notify(message, 'error');
+      }
     };
-    notify('fetch data successfully', 'warning');
 
     fetchProducts();
   }, []);
 
   return (
     <main>
-      {/* {} */}
       <Slider />
-      <Featured />
+      <Featured products={products} />
       <Offer />
     </main>
   );

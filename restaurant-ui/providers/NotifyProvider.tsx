@@ -11,26 +11,33 @@ interface Notify {
   duration?: number;
 }
 
-const typeToClass: Record<NotifyType, { bg: string; text: string; icon: ReactNode }> = {
+const typeToClass: Record<
+  NotifyType,
+  { title: string; bg: string; text: string; icon: ReactNode }
+> = {
   success: {
+    title: 'Sucessfully',
     bg: 'from-green-50',
     text: 'text-green-400',
     icon: <CircleCheck className='text-green-400 fill-green-100' />,
   },
   error: {
-    bg: 'from-red-50',
+    title: 'Error',
+    bg: 'from-rose-50',
     text: 'text-red-400',
     icon: <CircleXIcon className='text-red-400 fill-red-100' />,
   },
   warning: {
-    bg: 'from-yellow-50',
+    title: 'Warning',
+    bg: 'from-amber-100',
     text: 'text-yellow-400',
     icon: <TriangleAlert className='text-yellow-400 fill-yellow-100' />,
   },
   info: {
-    bg: 'from-blue-50',
+    title: 'Info',
+    bg: 'from-cyan-50',
     text: 'text-blue-400',
-    icon: <TriangleAlertIcon className='text-blue-400 fill-blue-100' />,
+    icon: <TriangleAlertIcon className='text-cyan-400 fill-cyan-100' />,
   },
 };
 
@@ -58,14 +65,26 @@ export const NotifyProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
+  // The data will share global for child components
   const notify = (message: string, type: NotifyType = 'info', duration: number = 3000) => {
     setNotification({ message, type, duration });
-    // setTimeout(() => {
-    //   setNotification(null);
-    // }, duration);
+    setTimeout(() => {
+      if (!ref.current) return;
+      ref.current.classList.add('slide-out');
+      ref.current.addEventListener(
+        'animationend',
+        () => {
+          setNotification(null);
+        },
+        {
+          once: true,
+        }
+      );
+    }, duration);
   };
 
   return (
+    // React Context
     <NotifyContext.Provider value={{ notify }}>
       {children}
       {!!notification && (
@@ -81,17 +100,7 @@ export const NotifyProvider = ({ children }: { children: React.ReactNode }) => {
               {typeToClass[notification.type].icon}
             </span>
             <div className='flex flex-col gap-1 text-start'>
-              <p className='font-bold capitalize'>
-                {notification.type === 'success'
-                  ? 'Successfully'
-                  : notification.type === 'error'
-                  ? 'Error'
-                  : notification.type === 'warning'
-                  ? 'Warning'
-                  : notification.type === 'info'
-                  ? 'Info'
-                  : ''}
-              </p>
+              <p className='font-bold capitalize'>{typeToClass[notification.type].title}</p>
               <span className='text-sm text-[#444]'>{notification.message}</span>
             </div>
             <div className=' transition-colors duration-300'>
