@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 
 type Props = {
-  id: number;
+  id: string;
   price: number;
   options?: {
     title: string;

@@ -1,4 +1,3 @@
-import { featuredProducts } from '@/data/data';
 import { Product } from '@/models/Product';
 import Image from 'next/image';
 

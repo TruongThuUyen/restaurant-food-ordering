@@ -17,8 +17,7 @@ export default function Home() {
       let response;
       try {
         response = await getProducts();
-        setProducts(response.data); //slice(0, response?.data?.length - 3)
-        notify('fetching data successfully', 'success');
+        setProducts(response.data);
       } catch (error: { status: number; message: string } | unknown) {
         let message = 'Failed to fetch data. Please try again later.';
 

@@ -9,6 +9,10 @@ interface Product {
   imageUrl: string;
   altText: string;
   rating: number;
+  options?: {
+    title: string;
+    additionalPrice: number;
+  }[];
 }
 
 export type { Product };
