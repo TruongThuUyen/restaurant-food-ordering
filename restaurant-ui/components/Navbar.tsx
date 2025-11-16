@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import React from 'react';
-import Menu from './Menu';
-import CartIcon from './CartIcon';
 import Image from 'next/image';
+import Link from 'next/link';
+import CartIcon from './CartIcon';
+import Menu from './Menu';
+import { RoutesName } from '@/routes/contanst';
 
 const Navbar = () => {
   const user = false;
@@ -10,9 +10,9 @@ const Navbar = () => {
     <div className='h-12 text-red-500 p-4 flex items-center justify-between border-b-2 border-b-red-500 uppercase md:h-24 lg:px-20 xl:px-40'>
       {/* LEFT LINK */}
       <div className='hidden md:flex gap-4'>
-        <Link href='/'>Home</Link>
-        <Link href='/menu'>Menu</Link>
-        <Link href='/contact'>Contact</Link>
+        <Link href={RoutesName.HOME}>Home</Link>
+        <Link href={RoutesName.MENU}>Menu</Link>
+        <Link href={RoutesName.CONTACT}>Contact</Link>
       </div>
       {/* LOGO */}
       <div className='text-xl md:font-bold flex-1 text-center'>

@@ -1,11 +1,10 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { STORAGE, getLocalStorage, removeLocalStorage } from '@/utils/storage';
+import { STORAGE, getSessionStorage, removeSessionStorage } from '@/utils/storage';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-console.log('NEXT_PUBLIC_BASE_URL', BASE_URL);
 
 const getToken = () => {
-  const userToken = getLocalStorage(STORAGE.USER_TOKEN);
+  const userToken = getSessionStorage(STORAGE.USER_TOKEN);
   return userToken || '';
 };
 
@@ -55,7 +54,7 @@ const onErrorResponse = (error: AxiosError | Error): Promise<AxiosError> => {
 
     // console.log('======> error', { message, method, url, statusText, status });
     if (status === 401 || status === 403) {
-      removeLocalStorage(STORAGE.USER_TOKEN);
+      removeSessionStorage(STORAGE.USER_TOKEN);
     } else {
       // showErrorApi(data);
     }

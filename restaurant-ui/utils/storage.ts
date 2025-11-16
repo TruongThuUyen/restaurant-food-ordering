@@ -2,14 +2,14 @@ export const STORAGE = {
   USER_TOKEN: 'USER_TOKEN',
 };
 
-export function getLocalStorage(key: string) {
-  return localStorage.getItem(key);
+export function getSessionStorage(key: string) {
+  return sessionStorage.getItem(key);
 }
 
-export function setLocalStorage(key: string, value: string) {
-  return localStorage.setItem(key, value);
+export function setSessionStorage(key: string, value: string) {
+  return sessionStorage.setItem(key, value);
 }
 
-export function removeLocalStorage(key: string) {
-  return localStorage.removeItem(key);
+export function removeSessionStorage(key: string) {
+  return sessionStorage.removeItem(key);
 }

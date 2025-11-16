@@ -1,5 +1,8 @@
 'use client';
 
+import { RoutesName } from '@/routes/contanst';
+import { getSessionStorage, STORAGE } from '@/utils/storage';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
 type Props = {
@@ -12,6 +15,7 @@ type Props = {
 };
 
 const Price = ({ price, id, options }: Props) => {
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [selected, setSelected] = useState(0);
 
@@ -21,6 +25,13 @@ const Price = ({ price, id, options }: Props) => {
       return quantity * price;
     }
   }, [quantity, selected, options, price]);
+
+  const AddProduct = (id: string, quantity: number) => {
+    const token = getSessionStorage(STORAGE.USER_TOKEN);
+    if (!token) {
+      router.push(RoutesName.LOGIN);
+    }
+  };
 
   return (
     <div className='flex flex-col gap-4'>
@@ -56,7 +67,9 @@ const Price = ({ price, id, options }: Props) => {
               onClick={() => setQuantity((prev) => (prev === 9 ? 9 : prev + 1))}>{`>`}</button>
           </div>
         </div>
-        <button className='uppercase w-56 bg-red-500 text-white p-3 ring-1 ring-red-500'>
+        <button
+          className='uppercase w-56 bg-red-500 text-white p-3 ring-1 ring-red-500 cursor-pointer'
+          onClick={() => AddProduct(id, quantity)}>
           Add to Card
         </button>
       </div>

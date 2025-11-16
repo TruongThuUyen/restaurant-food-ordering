@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 
 :root {
+  --color-navy: #020c4a;
+  --color-navy-hover: #0b1e78;
+  --color-red: #b91c1c;
+  --color-red-hover: #991b1b;
 }
 
 @theme inline {
