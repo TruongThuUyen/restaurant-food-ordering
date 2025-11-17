@@ -6,9 +6,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const connectDB = require('./config/db');
 
-// var indexRouter = require('./routes/index');
 var productRouter = require('./routes/products');
 var usersRouter = require('./routes/users');
+var citiesRouter = require('./routes/city');
+var authRouter = require('./routes/auth');
 
 // Connect to databse
 connectDB();
@@ -36,6 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/products', productRouter);
+app.use('/api/cities', citiesRouter);
+app.use('/api/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
