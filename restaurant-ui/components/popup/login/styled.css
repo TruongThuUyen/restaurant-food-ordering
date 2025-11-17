@@ -1,0 +1,29 @@
+.pull-popup-down {
+  animation: pull-popup-down 0.7s ease-in-out forwards;
+}
+
+@keyframes pull-popup-down {
+  0% {
+    height: 0%;
+  }
+
+  100% {
+    height: 100%;
+  }
+}
+
+.push-popup-up {
+  animation: push-popup-up 0.5s ease-in-out forwards;
+}
+
+@keyframes push-popup-up {
+  0% {
+    height: 100%;
+    opacity: 1;
+  }
+
+  100% {
+    height: 0%;
+    opacity: 0;
+  }
+}

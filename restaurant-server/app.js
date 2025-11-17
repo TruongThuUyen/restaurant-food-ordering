@@ -1,17 +1,27 @@
 var createError = require('http-errors');
+var cors = require('cors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const connectDB = require('./config/db');
 
-var indexRouter = require('./routes/index');
+// var indexRouter = require('./routes/index');
+var productRouter = require('./routes/products');
 var usersRouter = require('./routes/users');
 
 // Connect to databse
 connectDB();
 
 var app = express();
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,8 +33,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api/products', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

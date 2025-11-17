@@ -1,0 +1,6 @@
+.select-wrapper > div {
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+}

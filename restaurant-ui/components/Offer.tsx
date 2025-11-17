@@ -1,5 +1,9 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import CountDown from './CountDown';
+
+const CountDown = dynamic(() => import('./CountDown'), {
+  ssr: false,
+});
 
 const Offer = () => {
   return (
