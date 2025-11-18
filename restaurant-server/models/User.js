@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     avatar: {
       type: String,
@@ -66,7 +66,7 @@ userSchema.pre('save', async function (next) {
 });
 
 // Compare password
-userSchema.methods.comparePassword = async (enteredPassword) => {
+userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
