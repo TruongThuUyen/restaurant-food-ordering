@@ -6,7 +6,7 @@ const register = async (req, res) => {
     const { fullName, email, password, city, address, phone } = req.body;
     const exists = await User.findOne({ email });
     if (exists) {
-      return res.status(400).json({ success: false, message: 'User already exists' });
+      return res.status(400).json({ status: 4001, success: false, message: 'User already exists' });
     }
 
     // Create new user
@@ -21,11 +21,13 @@ const register = async (req, res) => {
 
     const token = generateToken(user);
 
-    res.status(201).json({
+    res.status(200).json({
+      status: 2000,
       success: true,
-      token,
-      user: {
+      message: 'Register successfully!',
+      data: {
         id: user._id,
+        token: token,
         email: user.email,
         fullName: user.fullName,
       },
