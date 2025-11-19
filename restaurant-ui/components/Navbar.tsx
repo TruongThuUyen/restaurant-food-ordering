@@ -1,11 +1,14 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import CartIcon from './CartIcon';
 import Menu from './Menu';
 import { RoutesName } from '@/routes/contanst';
+import { getSessionStorage, STORAGE } from '@/utils/storage';
 
 const Navbar = () => {
-  const user = false;
+  const user = getSessionStorage(STORAGE.USER_TOKEN);
+
   return (
     <div className='h-12 text-red-500 p-4 flex items-center justify-between border-b-2 border-b-red-500 uppercase md:h-24 lg:px-20 xl:px-40'>
       {/* LEFT LINK */}

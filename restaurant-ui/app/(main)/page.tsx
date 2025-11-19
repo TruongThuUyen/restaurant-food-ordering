@@ -4,13 +4,13 @@ import { getProducts } from '@/api/products';
 import Featured from '@/components/Featured';
 import Offer from '@/components/Offer';
 import Slider from '@/components/Slider';
-import { Product } from '@/models/Product';
+import { IProduct } from '@/models/product.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { notify } = useNotify();
-  const [products, setProducts] = useState<Product[] | []>([]);
+  const [products, setProducts] = useState<IProduct[] | []>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {

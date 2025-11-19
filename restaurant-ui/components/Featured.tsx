@@ -1,7 +1,7 @@
-import { Product } from '@/models/Product';
+import { IProduct } from '@/models/product.model';
 import Image from 'next/image';
 
-const Featured = ({ products }: { products: Product[] | [] }) => {
+const Featured = ({ products }: { products: IProduct[] | [] }) => {
   console.log(products);
   return (
     <div className='w-screen overflow-x-scroll text-red-500'>

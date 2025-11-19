@@ -3,13 +3,20 @@ export const STORAGE = {
 };
 
 export function getSessionStorage(key: string) {
-  return sessionStorage.getItem(key);
+  if (typeof window !== 'undefined') {
+    return sessionStorage.getItem(key);
+  }
+  return null;
 }
 
 export function setSessionStorage(key: string, value: string) {
-  return sessionStorage.setItem(key, value);
+  if (typeof window !== 'undefined') {
+    return sessionStorage.setItem(key, value);
+  }
 }
 
 export function removeSessionStorage(key: string) {
-  return sessionStorage.removeItem(key);
+  if (typeof window !== 'undefined') {
+    return sessionStorage.removeItem(key);
+  }
 }

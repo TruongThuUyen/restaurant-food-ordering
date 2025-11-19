@@ -1,7 +1,7 @@
 'use client';
 import { getProductById } from '@/api/products';
 import Price from '@/components/Price';
-import { Product } from '@/models/Product';
+import { Product } from '@/models/product.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';

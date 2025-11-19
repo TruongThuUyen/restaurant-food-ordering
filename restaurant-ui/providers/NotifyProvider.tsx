@@ -91,7 +91,7 @@ export const NotifyProvider = ({ children }: { children: React.ReactNode }) => {
         <div
           ref={ref}
           className={`notify-wrapper
-            fixed z-1 top-1/5 left-4 py-[10px] px-5 text-center rounded-md bg-gradient-to-r ${
+            fixed z-99999 top-1/10 left-4 py-[10px] px-5 text-center rounded-md bg-gradient-to-r ${
               typeToClass[notification.type].bg
             } to-white shadow-[0_-2px_10px_rgba(0,0,0,0.2),0_2px_10px_rgba(0,0,0,0.2)] opacity-100
           `}>

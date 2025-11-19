@@ -1,34 +1,39 @@
 'use client';
+import { login } from '@/api/auth';
+import schema from '@/app/(auth)/login/schema';
+import FieldError from '@/components/field/error/FieldError';
 import { FiledInput } from '@/components/field/input/FieldInput';
-import scheme from '@/app/(auth)/login/scheme';
+import { IResponseError } from '@/models/response.model';
+import { ILogin } from '@/models/user.model';
+import { useNotify } from '@/providers/NotifyProvider';
+import { RoutesName } from '@/routes/contanst';
+import { getErrorMessage } from '@/utils/errorHandle';
+import { setSessionStorage, STORAGE } from '@/utils/storage';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 import { EyeClosed, EyeIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import './styled.css';
-import { yupResolver } from '@hookform/resolvers/yup';
-import FieldError from '@/components/field/error/FieldError';
-import { RoutesName } from '@/routes/contanst';
 
 type ModalProps = {
   onClose: (value: boolean) => void;
 };
 
-interface FormValues {
-  email?: string;
-  password?: string;
-}
-
 const LoginModal = ({ onClose }: ModalProps) => {
   const [showPass, setShowPass] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
+  const { notify } = useNotify();
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
-    resolver: yupResolver(scheme),
+    resolver: yupResolver(schema),
   });
 
   const closeTheModal = () => {
@@ -45,22 +50,41 @@ const LoginModal = ({ onClose }: ModalProps) => {
     );
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(form.getValues());
-    console.log('data:: ', data);
+  const onSubmit: SubmitHandler<ILogin> = async (data) => {
+    try {
+      const response = await login(data);
+      if (response.status === 2000) {
+        notify('Login successfully', 'success');
+        setTimeout(() => {
+          router.push(RoutesName.HOME);
+          setSessionStorage(STORAGE.USER_TOKEN, response.data.token);
+        }, 2000);
+      }
+    } catch (error) {
+      let errorMessage = getErrorMessage(error);
+      if (axios.isAxiosError(error)) {
+        const serverError = error.response?.data as IResponseError;
+
+        if (serverError) {
+          errorMessage = serverError.message;
+        }
+      }
+
+      notify(errorMessage, 'error');
+    }
   };
 
   return (
     <div
       ref={ref}
       className='fixed inset-0 z-100 bg-black/40 flex items-center justify-center pull-popup-down'>
-      <div className='w-[80%] sm:w-100 bg-white p-5 rounded-xl relative'>
+      <div className='w-[85%] sm:w-100 bg-white p-5 rounded-xl relative'>
         <p className='capitalize text-black text-xl sm:text-2xl font-medium'>
           Let's get <span className='text-(--color-navy)'>started</span>
         </p>
         {/* FORM CONTAINER */}
         <FormProvider {...form}>
-          <div className='flex flex-col gap-5 my-6'>
+          <div className='flex flex-col gap-4 md:gap-5 my-6'>
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Email address</p>
               <FiledInput
@@ -106,11 +130,11 @@ const LoginModal = ({ onClose }: ModalProps) => {
         {/* BUTTON - LOGIN */}
         <button
           onClick={form.handleSubmit(onSubmit)}
-          className='my-4 py-2 px-4 rounded-3xl text-center text-white w-full bg-(--color-navy) cursor-pointer hover:bg-(--color-navy-hover)'>
+          className='my-3 md:my-4 py-2 px-4 rounded-3xl text-center text-white w-full bg-(--color-navy) cursor-pointer hover:bg-(--color-navy-hover)'>
           Login
         </button>
 
-        <div className='text-center text-sm my-4'>
+        <div className='text-center text-sm my-3 md:my-4'>
           Or
           <Link
             href={RoutesName.SIGNUP}
