@@ -1,7 +1,6 @@
 var express = require('express');
-require('dotenv').config();
+const Cart = require('../models/Cart');
 var router = express.Router();
-const Cart = required('../models/Cart');
 
 /* Get carts */
 router.get('/', async (req, res) => {

@@ -13,7 +13,7 @@ const OrderSchema = new mongoose.Schema(
       required: true,
     },
     orderId: {
-      type: String | Number,
+      type: String,
       required: true,
     },
     date: {
@@ -45,6 +45,6 @@ const OrderSchema = new mongoose.Schema(
   }
 );
 
-const Order = mongoose.model('Order', ProductSchema);
+const Order = mongoose.model('Order', OrderSchema);
 
 module.exports = Order;
