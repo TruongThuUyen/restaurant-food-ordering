@@ -1,7 +1,7 @@
 'use client';
 import { getProductById } from '@/api/products';
 import Price from '@/components/Price';
-import { Product } from '@/models/product.model';
+import { IProduct } from '@/models/product.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 const SingleProductPage = () => {
   const { notify } = useNotify();
-  const [product, setProduct] = useState<Product | undefined>();
+  const [product, setProduct] = useState<IProduct | undefined>();
   const params = useParams();
   const { id } = params;
   useEffect(() => {

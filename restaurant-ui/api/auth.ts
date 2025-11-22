@@ -11,7 +11,7 @@ const register = async (data: IRegister) => {
 };
 
 const getProfile = async () => {
-  return AxiosClient.post(END_POINT.AUTH.PROFILE);
+  return AxiosClient.get(END_POINT.AUTH.PROFILE);
 };
 
 export { getProfile, login, register };

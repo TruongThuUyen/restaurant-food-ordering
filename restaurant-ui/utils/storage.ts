@@ -1,5 +1,7 @@
 export const STORAGE = {
   USER_TOKEN: 'USER_TOKEN',
+  USER_CART: 'USER_CART',
+  USER_INFO: 'USER_INFO',
 };
 
 export function getSessionStorage(key: string) {

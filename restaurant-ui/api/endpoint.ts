@@ -9,6 +9,10 @@ const END_POINT = {
     REGISTER: '/auth/register',
     PROFILE: '/auth/profile',
   },
+  CART: {
+    GET_BY_USER_ID: `/cart`,
+    ADD_TO_CART: '/add',
+  },
 };
 
 export default END_POINT;
