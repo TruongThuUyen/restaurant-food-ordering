@@ -1,13 +1,18 @@
+import { RoutesName } from '@/routes/contanst';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const CartIcon = () => {
+type CartProps = {
+  onClose?: () => void;
+};
+
+const CartIcon = ({ onClose }: CartProps) => {
   return (
-    <Link href='/cart' className='flex gap-4 items-center'>
+    <Link href={RoutesName.CART} className='flex gap-1 items-center' onClick={() => onClose?.()}>
       <div className='relative w-8 h-8 md:w-5 md:h-5'>
         <Image src='/cart.png' alt='card' fill />
       </div>
-      <span> Card {3}</span>
+      Cart
     </Link>
   );
 };

@@ -3,6 +3,7 @@ export const RoutesName = {
   SIGNUP: '/signup',
   HOME: '/',
   MENU: '/menu',
-  ORDER: '/order',
+  ORDER: '/orders',
   CONTACT: '/contact',
+  CART: '/cart',
 };
