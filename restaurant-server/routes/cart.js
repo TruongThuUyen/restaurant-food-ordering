@@ -1,6 +1,7 @@
 var express = require('express');
 const Cart = require('../models/Cart');
 const { getDateTime } = require('../utils/getDateTime');
+const { subTotal, totalCost } = require('../services/caculateCost');
 var router = express.Router();
 
 /* Get carts */
@@ -8,7 +9,11 @@ router.post('/', async (req, res) => {
   try {
     const userId = req.body.userId;
     const carts = await Cart.findOne({ userId });
+
+    if (!carts) return res.status(200).json({ status: 4000, message: 'No item in cart!' });
+
     res.status(200).json({
+      status: 2000,
       success: true,
       data: carts,
     });
@@ -21,7 +26,6 @@ router.post('/merge', async (req, res) => {
   try {
     const userId = req.body.userId;
     const itemsFromClient = req.body.items;
-    console.log(req.body);
 
     // Validate
     if (!itemsFromClient || itemsFromClient.length === 0) {
@@ -36,13 +40,15 @@ router.post('/merge', async (req, res) => {
     // If cart not exist -> create new cart
     if (!cart) {
       const cartNumber = `CART-${getDateTime()}-${userId}`;
+
       cart = await Cart.create({
         userId,
         items: itemsFromClient,
         cartNumber: cartNumber,
+        subTotal: subTotal(cart?.items),
         serviceCost: req.body.serviceCost,
         deliveryCost: req.body.deliveryCost,
-        totalCost: req.body.totalCost,
+        totalCost: totalCost(cart),
       });
 
       return res.status(200).json({
@@ -63,6 +69,8 @@ router.post('/merge', async (req, res) => {
       }
     });
 
+    cart.subTotal = subTotal(cart.items);
+    cart.totalCost = totalCost(cart);
     await cart.save();
 
     return res.json({
