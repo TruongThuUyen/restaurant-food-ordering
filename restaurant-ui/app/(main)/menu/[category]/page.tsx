@@ -1,6 +1,6 @@
 'use client';
 import { getProducts } from '@/api/products';
-import { Product } from '@/models/Product';
+import { IProduct } from '@/models/product.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 const CategoryPage = () => {
   const params = useParams();
-  const [products, setProducts] = useState<Product[] | []>([]);
+  const [products, setProducts] = useState<IProduct[] | []>([]);
   const { notify } = useNotify();
 
   useEffect(() => {

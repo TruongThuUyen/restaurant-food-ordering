@@ -1,8 +1,8 @@
-import { Product } from '@/models/Product';
+import { IProduct } from '@/models/product.model';
 import Image from 'next/image';
+import { CartButton } from './button/cart/CartButton';
 
-const Featured = ({ products }: { products: Product[] | [] }) => {
-  console.log(products);
+const Featured = ({ products }: { products: IProduct[] | [] }) => {
   return (
     <div className='w-screen overflow-x-scroll text-red-500'>
       {/* WRAPPER */}
@@ -24,7 +24,7 @@ const Featured = ({ products }: { products: Product[] | [] }) => {
                 <h1 className='text-xl font-bold uppercase'>{item.foodName}</h1>
                 <p className='px-4 2xl:px-8'>{item.description}</p>
                 <span className='text-xl font-bold xl:text-2xl 2xl:text-3xl'>{item.price}</span>
-                <button className='bg-red-500 text-white p-2 rounded-md'>Add to Card</button>
+                <CartButton product={item} />
               </div>
             </div>
           ))}
@@ -34,4 +34,3 @@ const Featured = ({ products }: { products: Product[] | [] }) => {
 };
 
 export default Featured;
-// 56:25

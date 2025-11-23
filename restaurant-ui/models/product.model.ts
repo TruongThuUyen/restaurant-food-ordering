@@ -1,4 +1,4 @@
-interface Product {
+export interface IProduct {
   _id: string;
   foodName: string;
   description: string;
@@ -14,5 +14,3 @@ interface Product {
     additionalPrice: number;
   }[];
 }
-
-export type { Product };

@@ -20,7 +20,6 @@ const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConf
   // Set Headers Here
   // Check Authentication Here
   // Set Loading Start Here
-
   const token = getToken();
 
   if (token) {
@@ -43,14 +42,9 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 
 const onErrorResponse = (error: AxiosError | Error): Promise<AxiosError> => {
   if (axios.isAxiosError(error)) {
-    // console.log('🚀 [API] ERROR: ', { error });
     const { response } = error;
     // const { method, url } = error.config;
-    const {
-      // statusText,
-      status,
-      // data,
-    } = response ?? {};
+    const { status } = response ?? {};
 
     // console.log('======> error', { message, method, url, statusText, status });
     if (status === 401 || status === 403) {
