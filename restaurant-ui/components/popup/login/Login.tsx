@@ -3,12 +3,19 @@ import { login } from '@/api/auth';
 import schema from '@/app/(auth)/login/schema';
 import FieldError from '@/components/field/error/FieldError';
 import { FiledInput } from '@/components/field/input/FieldInput';
+import { ICartRequest, ItemProduct } from '@/models/cart.model';
 import { IResponseError } from '@/models/response.model';
 import { ILogin } from '@/models/user.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
-import { setSessionStorage, STORAGE } from '@/utils/storage';
+import { mergeCart } from '@/utils/mergeCarts';
+import {
+  getSessionStorage,
+  removeSessionStorage,
+  setSessionStorage,
+  STORAGE,
+} from '@/utils/storage';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { EyeClosed, EyeIcon, XIcon } from 'lucide-react';
@@ -55,10 +62,31 @@ const LoginModal = ({ onClose }: ModalProps) => {
       const response = await login(data);
       if (response.status === 2000) {
         notify('Login successfully', 'success');
+        setSessionStorage(STORAGE.USER_TOKEN, response.data.token);
         setTimeout(() => {
           router.push(RoutesName.HOME);
-          setSessionStorage(STORAGE.USER_TOKEN, response.data.token);
         }, 2000);
+      }
+
+      /* --------- GET CART FROM SESSION STORAGE ----------- */
+      const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
+      if (!!cartFromStorage) {
+        const cartData = JSON.parse(cartFromStorage);
+
+        // Merge cart from sessionStorage to DB
+        const cart: ICartRequest = {
+          userId: response.data.id,
+          items: (cartData.items as ItemProduct[]) ?? [],
+          deliveryCost: 0,
+          serviceCost: 0,
+        };
+
+        const cartMerged = await mergeCart(cart);
+
+        if (cartMerged.status === 0) notify('Fail when fetch cart. Please try again!', 'error');
+        else {
+          removeSessionStorage(STORAGE.USER_CART);
+        }
       }
     } catch (error) {
       let errorMessage = getErrorMessage(error);

@@ -1,5 +1,5 @@
 import { addToCart, getCartByUserId } from '@/api/cart';
-import { ICart } from '@/models/cart.model';
+import { ICart, ICartRequest } from '@/models/cart.model';
 
 export const getCart = async (userId: string) => {
   try {
@@ -17,10 +17,9 @@ export const getCart = async (userId: string) => {
   }
 };
 
-export const mergeCart = async (cart: Omit<ICart, '_id' | 'cartNumber'>) => {
+export const mergeCart = async (cart: ICartRequest) => {
   try {
     const response = await addToCart(cart);
-
     return {
       status: 1,
       data: response.data,

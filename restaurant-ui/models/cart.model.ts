@@ -3,6 +3,7 @@ export type ItemProduct = {
   foodName: string;
   quantity: number;
   price: number;
+  productImage?: string;
 };
 
 export interface ICart {
@@ -10,7 +11,15 @@ export interface ICart {
   userId: string;
   cartNumber: string;
   items: ItemProduct[];
+  subTotal: number;
   serviceCost: number;
   deliveryCost: number;
   totalCost: number;
+}
+
+export interface ICartRequest {
+  userId: string;
+  items: ItemProduct[];
+  serviceCost: number;
+  deliveryCost: number;
 }
