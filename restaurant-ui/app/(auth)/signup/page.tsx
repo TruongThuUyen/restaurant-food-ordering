@@ -10,7 +10,7 @@ import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { ArrowLeft, ArrowLeftCircle, EyeClosed, EyeIcon, Router } from 'lucide-react';
+import { ArrowLeft, EyeClosed, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

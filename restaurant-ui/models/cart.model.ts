@@ -4,6 +4,7 @@ export type ItemProduct = {
   quantity: number;
   price: number;
   productImage?: string;
+  size: 'Small' | 'Medium' | 'Large';
 };
 
 export interface ICart {

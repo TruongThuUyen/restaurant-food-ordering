@@ -1,8 +1,12 @@
-import { IProduct } from '@/models/product.model';
+'use client';
+import { IProduct, ProductSize } from '@/models/product.model';
 import Image from 'next/image';
-import { CartButton } from './button/cart/CartButton';
+import { useState } from 'react';
+import CartButton from './button/cart/CartButton';
 
 const Featured = ({ products }: { products: IProduct[] | [] }) => {
+  const [selectedSize, setSelectedSize] = useState<Record<string, ProductSize>>({});
+
   return (
     <div className='w-screen overflow-x-scroll text-red-500'>
       {/* WRAPPER */}
@@ -23,8 +27,26 @@ const Featured = ({ products }: { products: IProduct[] | [] }) => {
               <div className='flex-1 flex flex-col justify-center items-center gap-4 text-center'>
                 <h1 className='text-xl font-bold uppercase'>{item.foodName}</h1>
                 <p className='px-4 2xl:px-8'>{item.description}</p>
-                <span className='text-xl font-bold xl:text-2xl 2xl:text-3xl'>{item.price}</span>
-                <CartButton product={item} />
+                <div className='flex gap-4 items-center'>
+                  {item?.options && (
+                    <select
+                      className='group border-1 border-red-400 text-xs py-1 px-2 outline-none'
+                      value={selectedSize[item._id] ?? 'Medium'}
+                      onChange={(e) =>
+                        setSelectedSize((prev) => ({
+                          ...prev,
+                          [item._id]: e.target.value as ProductSize,
+                        }))
+                      }>
+                      {item?.options.map((option) => (
+                        <option key={option.title}>{option.title}</option>
+                      ))}
+                    </select>
+                  )}
+
+                  <span className='text-xl font-bold xl:text-2xl 2xl:text-3xl'>{item.price}</span>
+                </div>
+                <CartButton product={item} size={selectedSize[item._id] ?? 'Medium'} />
               </div>
             </div>
           ))}

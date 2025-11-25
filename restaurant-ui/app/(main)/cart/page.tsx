@@ -5,18 +5,40 @@ import { IResponseError } from '@/models/response.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
+import { getSessionStorage, STORAGE } from '@/utils/storage';
 import { useUser } from '@/utils/useUser';
 import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const CartPage = () => {
-  const [cart, setCart] = useState<ICart>();
-  const { notify } = useNotify();
+const defaultCart: ICart = {
+  _id: '',
+  userId: '',
+  cartNumber: '',
+  items: [],
+  subTotal: 0,
+  serviceCost: 0,
+  deliveryCost: 0,
+  totalCost: 0,
+};
 
+const CartPage = () => {
+  const [cart, setCart] = useState<ICart>(defaultCart);
+  const { notify } = useNotify();
+  const router = useRouter();
   const { userProfile } = useUser();
+
+  useEffect(() => {
+    const userCart = getSessionStorage(STORAGE.USER_CART);
+    if (userCart) {
+      Promise.resolve().then(() => {
+        setCart(JSON.parse(userCart));
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (userProfile && userProfile._id) {
@@ -41,6 +63,12 @@ const CartPage = () => {
     }
   }, [userProfile]);
 
+  const checkout = () => {
+    if (!userProfile) {
+      router.push(RoutesName.LOGIN);
+    }
+  };
+
   return (
     <div className='h-[calc(100%-6rem)] md:h-[calc(100%-9rem)]'>
       {!!cart && cart?.items?.length > 0 ? (
@@ -60,7 +88,7 @@ const CartPage = () => {
                 cart.items.map((product) => (
                   /* SINGLE ITEM */
                   <div
-                    key={product.productId}
+                    key={`${product.productId}${product.size}`}
                     className='grid grid-cols-8 items-center gap-4 py-3 border-b'>
                     <div className='relative w-16 h-16 md:w-20 md:h-20'>
                       <Image
@@ -74,8 +102,8 @@ const CartPage = () => {
                       <span>Large</span>
                     </div>
                     <h2 className='font-bold'>{product.quantity}</h2>
-                    <h2 className='font-bold'>{product.price}</h2>
-                    <h2 className='font-bold'>{product.price * product.quantity}</h2>
+                    <h2 className='font-bold'>{product.price.toFixed(2)}</h2>
+                    <h2 className='font-bold'>{(product.price * product.quantity).toFixed(2)}</h2>
                     <p className='flex items-center justify-center w-5 h-5 hover:bg-fuchsia-100 cursor-pointer'>
                       <span>x</span>
                     </p>
@@ -106,7 +134,9 @@ const CartPage = () => {
               <span className='uppercase text-xl'> Total(incl vat)</span>
               <span className='text-red-500 font-bold'>{cart.totalCost}</span>
             </div>
-            <button className='bg-red-500 text-white text-base py-[6px] px-3 rounded-md w-1/2 self-end cursor-pointer hover:bg-red-600'>
+            <button
+              onClick={() => checkout()}
+              className='bg-red-500 text-white text-base py-[6px] px-3 rounded-md w-1/2 self-end cursor-pointer hover:bg-red-600'>
               CHECKOUT
             </button>
           </div>

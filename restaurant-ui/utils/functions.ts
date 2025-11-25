@@ -1,4 +1,5 @@
 import { ItemProduct } from '@/models/cart.model';
+import { IProduct } from '@/models/product.model';
 
 const subTotal = (productList: ItemProduct[]) => {
   const subtotal = productList.reduce((total: number, productItem: ItemProduct) => {
@@ -12,4 +13,11 @@ const totalCost = (subTotal: number, deliveryCost: number, serviceCost: number) 
   return Number((subTotal + deliveryCost + serviceCost).toFixed(2));
 };
 
-export { subTotal, totalCost };
+const getFinalPrice = (product: IProduct, size: string) => {
+  const options = product.options?.find((opt) => opt.title === size);
+  const additional = options?.additionalPrice ?? 0;
+  console.log(options);
+  return product.price + additional;
+};
+
+export { subTotal, totalCost, getFinalPrice };
