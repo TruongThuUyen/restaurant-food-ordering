@@ -13,6 +13,7 @@ const createCart = async (userId, itemsFromClient, serviceCost = 0, deliveryCost
 
   for (const clientItem of itemsFromClient) {
     const product = await Product.findById(clientItem.productId);
+
     const finalPrice = computeFinalPrice(product, clientItem.size);
 
     transformedItems.push({
@@ -20,7 +21,7 @@ const createCart = async (userId, itemsFromClient, serviceCost = 0, deliveryCost
       foodName: product.foodName,
       quantity: clientItem.quantity,
       size: clientItem.size,
-      productImage: product.image,
+      productImage: product.imageUrl,
       price: finalPrice,
     });
   }
@@ -61,7 +62,7 @@ const mergeCart = async (cart, itemsFromClient) => {
           foodName: product.foodName,
           quantity: clientItem.quantity,
           size: clientItem.size,
-          productImage: product.productImage,
+          productImage: product.imageUrl,
           price: finalPrice,
         });
       }
@@ -72,7 +73,7 @@ const mergeCart = async (cart, itemsFromClient) => {
         foodName: product.foodName,
         quantity: clientItem.quantity,
         size: clientItem.size,
-        productImage: product.productImage,
+        productImage: product.imageUrl,
         price: finalPrice,
       });
     }
@@ -96,13 +97,13 @@ const subTotalCost = (productList) => {
 
 const totalCost = (cart) => {
   if (!cart) return 0;
-  return (cart.subTotal + cart.serviceCost + cart.deliveryCost).toFixed(2);
+  return Number((cart.subTotal + cart.serviceCost + cart.deliveryCost).toFixed(2));
 };
 
 const computeFinalPrice = (product, size) => {
   const opt = product.options?.find((o) => o.title === size);
   const additionalPrice = opt?.additionalPrice ?? 0;
-  return product.price + additionalPrice;
+  return Number((product.price + additionalPrice).toFixed(2));
 };
 
 module.exports = {
