@@ -43,9 +43,64 @@ const mergeCart = async (req, res) => {
       .status(200)
       .json({ status: 20001, success: true, message: 'Cart merged successfully', data: cart });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: 'Error when add to cart!' });
   }
 };
 
-module.exports = { getCart, mergeCart };
+const decreaseItemQuantity = async (req, res) => {
+  const id = req.body._id;
+  try {
+    let cart = await Cart.findById(id);
+    if (!cart)
+      return res.status(400).json({ status: 4000, success: true, message: 'Cart not found!' });
+    else {
+      const response = await cartService.decreaseItemQuantity(
+        req.body.productId,
+        req.body.productSize,
+        cart
+      );
+
+      if (response === 1) {
+        res.status(200).json({
+          status: 2000,
+          success: true,
+          message: 'Remove item from cart successfully!',
+          data: cart,
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ status: 4000, success: true, message: 'Cannot remove item from cart!' });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error when remove item from cart!' });
+  }
+};
+
+const removeItem = async (req, res) => {
+  try {
+    const cartId = req.body._id;
+    const cart = await Cart.findById(cartId);
+    if (!cart)
+      return res.status(400).json({ status: 4000, success: true, message: 'Cart not found!' });
+
+    const response = await cartService.removeItem(cart, req.body.productId2, req.body.productSize);
+    if (response === 1) {
+      res.status(200).json({
+        status: 2000,
+        success: true,
+        message: 'Remove item from cart successfully!',
+        data: cart,
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ status: 4000, success: true, message: 'Cannot remove item from cart!' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error when remove item from cart!' });
+  }
+};
+
+module.exports = { getCart, mergeCart, decreaseItemQuantity, removeItem };

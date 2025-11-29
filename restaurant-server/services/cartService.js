@@ -86,6 +86,48 @@ const mergeCart = async (cart, itemsFromClient) => {
   return cart;
 };
 
+const decreaseItemQuantity = async (productId, productSize, cart) => {
+  const index = cart.items.findIndex(
+    (item) => item.productId.toString() === productId && item.size === productSize
+  );
+  if (index === -1) return 0;
+
+  if (cart.items[index].quantity > 1) {
+    cart.items[index].quantity -= 1;
+  } else {
+    cart.items = cart.items.filter(
+      (item) =>
+        item.productId.toString() !== cart.items[index].productId.toString() ||
+        item.size !== productSize
+    );
+  }
+  cart.subTotal = subTotalCost(cart.items);
+  cart.totalCost = totalCost(cart);
+
+  await cart.save();
+
+  return 1;
+};
+
+const removeItem = async (cart, productId, productSize) => {
+  const index = cart.items.findIndex(
+    (item) => item.productId.toString() === productId && item.size === productSize
+  );
+
+  if (index === -1) return 0;
+
+  cart.items = cart.items.filter(
+    (item) =>
+      item.productId.toString() !== cart.items[index].productId.toString() ||
+      item.size !== productSize
+  );
+  cart.subTotal = subTotalCost(cart.items);
+  cart.totalCost = totalCost(cart);
+
+  await cart.save();
+  return 1;
+};
+
 const subTotalCost = (productList) => {
   if (!productList) return 0;
   const subTotal = productList.reduce((total, productItem) => {
@@ -110,4 +152,6 @@ module.exports = {
   getCart,
   createCart,
   mergeCart,
+  decreaseItemQuantity,
+  removeItem,
 };
