@@ -1,3 +1,5 @@
+export type ProductSize = 'Small' | 'Medium' | 'Large';
+
 export interface IProduct {
   _id: string;
   foodName: string;
@@ -5,12 +7,12 @@ export interface IProduct {
   price: number;
   isAvailable: boolean;
   category: string;
-  ingredients: [string];
+  ingredients: string[];
   imageUrl: string;
   altText: string;
   rating: number;
   options?: {
-    title: string;
+    title: ProductSize;
     additionalPrice: number;
   }[];
 }

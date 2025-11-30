@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
 import CartIcon from './CartIcon';
 import Menu from './Menu';
+import { useUser } from '@/utils/useUser';
 
 function subscribe() {
   return () => {};
@@ -23,9 +24,11 @@ const Navbar = () => {
   const user = useSyncExternalStore(subscribe, getSnapshot, () => null);
   const router = useRouter();
   const { notify } = useNotify();
+  const { setUserProfile } = useUser();
 
   const handleLogout = () => {
     removeSessionStorage(STORAGE.USER_TOKEN);
+    setUserProfile(null);
     notify('Logout sucessfully', 'success');
     setTimeout(() => {
       router.push(RoutesName.HOME);
@@ -42,7 +45,7 @@ const Navbar = () => {
       </div>
       {/* LOGO */}
       <div className='text-xl md:font-bold flex-1 text-center'>
-        <Link href='/'>Massimo</Link>
+        <Link href={RoutesName.HOME}>Massimo</Link>
       </div>
       {/* MOBILE MENU */}
       <div className='md:hidden'>

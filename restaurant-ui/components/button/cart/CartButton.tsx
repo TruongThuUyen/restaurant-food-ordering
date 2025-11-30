@@ -1,22 +1,21 @@
 'use client';
 
 import { ICart, ICartRequest, ItemProduct } from '@/models/cart.model';
-import { IProduct } from '@/models/product.model';
+import { IProduct, ProductSize } from '@/models/product.model';
 import { useNotify } from '@/providers/NotifyProvider';
-import { UserContext } from '@/providers/UserProvider';
+import { getFinalPrice, subTotal, totalCost } from '@/utils/functions';
 import { mergeCart } from '@/utils/mergeCarts';
 import { getSessionStorage, setSessionStorage, STORAGE } from '@/utils/storage';
-import { ShoppingCart, Square } from 'lucide-react';
-import { useContext, useState } from 'react';
-import './styled.css';
 import { useUser } from '@/utils/useUser';
-import { subTotal, totalCost } from '@/utils/caculateCost';
-
+import { ShoppingCart, Square } from 'lucide-react';
+import React, { useState } from 'react';
+import './styled.css';
 interface CartButtonProps {
   product: IProduct;
+  size: ProductSize;
 }
 
-export const CartButton = ({ product }: CartButtonProps) => {
+const CartButton = ({ product, size }: CartButtonProps) => {
   const [isClicked, setIsClicked] = useState(false);
   const { notify } = useNotify();
   const { userProfile } = useUser();
@@ -34,10 +33,11 @@ export const CartButton = ({ product }: CartButtonProps) => {
 
     const cartItem: ItemProduct = {
       foodName: product.foodName,
-      price: product.price,
+      price: getFinalPrice(product, size),
       productId: product._id,
       quantity: 1,
       productImage: product.imageUrl,
+      size: size,
     };
 
     // If user is logged in -> save new cart in db
@@ -76,10 +76,15 @@ export const CartButton = ({ product }: CartButtonProps) => {
       // Get cart from sessionStorage
       if (userCart) {
         carts = JSON.parse(userCart);
-        const index = carts.items.findIndex((item) => item.productId === cartItem.productId);
+        const filteredItems = carts.items.filter((item) => item.productId === cartItem.productId);
 
-        if (index !== -1) {
-          carts.items[index].quantity += 1;
+        if (filteredItems.length > 0) {
+          const index = filteredItems.findIndex((item) => item.size === size);
+
+          // If item has same size
+          if (index !== -1) {
+            carts.items[index].quantity += 1;
+          } else carts.items.push(cartItem);
         } else {
           carts.items.push(cartItem);
         }
@@ -119,3 +124,5 @@ export const CartButton = ({ product }: CartButtonProps) => {
     </button>
   );
 };
+
+export default React.memo(CartButton);

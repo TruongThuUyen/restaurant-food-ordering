@@ -20,7 +20,7 @@ const LoginPage = () => {
           <Image src='/loginBg.png' alt='' fill className='object-cover' />
         </div>
         {/* FORM CONTAINER */}
-        <div className='p-10 flex flex-col gap-4 md:gap-6 md:w-1/2'>
+        <div className='p-10 flex flex-col gap-3 md:gap-5 md:w-1/2'>
           <h1 className='font-bold text-xl xl:text-3xl'>Welcome</h1>
           <p>Log into your account or create a new one using social buttons</p>
           <button
@@ -48,6 +48,11 @@ const LoginPage = () => {
               Contact us
             </Link>
           </p>
+          <Link
+            href={RoutesName.HOME}
+            className='flex gap-1 justify-center items-center text-sm underline text-cyan-800'>
+            <span>Back home</span>
+          </Link>
         </div>
       </div>
 

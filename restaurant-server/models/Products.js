@@ -48,6 +48,21 @@ const ProductSchema = new mongoose.Schema(
       max: 5,
       default: 0,
     },
+    options: {
+      type: [
+        {
+          title: {
+            type: String,
+            required: true,
+            enum: ['Small', 'Medium', 'Large'],
+          },
+          additionalPrice: {
+            type: Number,
+            default: 0,
+          },
+        },
+      ],
+    },
   },
   {
     timestamps: true,

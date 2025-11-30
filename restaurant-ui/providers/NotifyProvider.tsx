@@ -101,7 +101,9 @@ export const NotifyProvider = ({ children }: { children: React.ReactNode }) => {
             </span>
             <div className='flex flex-col gap-1 text-start'>
               <p className='font-bold capitalize'>{typeToClass[notification.type].title}</p>
-              <span className='text-sm text-[#444]'>{notification.message}</span>
+              <span className='text-sm text-[#444] whitespace-pre-line break-words'>
+                {notification.message}
+              </span>
             </div>
             <div className=' transition-colors duration-300'>
               <span

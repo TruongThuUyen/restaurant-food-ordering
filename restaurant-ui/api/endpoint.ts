@@ -12,6 +12,8 @@ const END_POINT = {
   CART: {
     GET_BY_USER_ID: `/cart`,
     ADD_TO_CART: '/cart/merge',
+    DECREASE: '/cart/items/decrease',
+    REMOVE_ITEM: '/cart/items/remove',
   },
 };
 

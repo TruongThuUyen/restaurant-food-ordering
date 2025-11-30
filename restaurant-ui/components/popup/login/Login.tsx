@@ -4,7 +4,6 @@ import schema from '@/app/(auth)/login/schema';
 import FieldError from '@/components/field/error/FieldError';
 import { FiledInput } from '@/components/field/input/FieldInput';
 import { ICartRequest, ItemProduct } from '@/models/cart.model';
-import { IResponseError } from '@/models/response.model';
 import { ILogin } from '@/models/user.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
@@ -17,7 +16,6 @@ import {
   STORAGE,
 } from '@/utils/storage';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
 import { EyeClosed, EyeIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -89,16 +87,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
         }
       }
     } catch (error) {
-      let errorMessage = getErrorMessage(error);
-      if (axios.isAxiosError(error)) {
-        const serverError = error.response?.data as IResponseError;
-
-        if (serverError) {
-          errorMessage = serverError.message;
-        }
-      }
-
-      notify(errorMessage, 'error');
+      notify(getErrorMessage(error), 'error');
     }
   };
 

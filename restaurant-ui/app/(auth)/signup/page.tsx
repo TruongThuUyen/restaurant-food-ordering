@@ -10,7 +10,7 @@ import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { EyeClosed, EyeIcon } from 'lucide-react';
+import { ArrowLeft, EyeClosed, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -56,9 +56,22 @@ const SignUp = () => {
   return (
     <div className='w-full h-screen flex flex-col justify-center items-center'>
       <div className='w-full sm:w-100 mx-auto px-6 sm:px-5 py-5 sm:rounded-xl bg-white sm:border-1 sm:border-[#020c4a]'>
-        <p className='capitalize text-(--color-red) text-xl sm:text-2xl font-medium'>
-          Create an account
-        </p>
+        <div className='flex justify-between items-center'>
+          <p className='capitalize text-(--color-red) text-xl sm:text-2xl font-medium'>
+            Create an account
+          </p>
+          <Link
+            href={RoutesName.HOME}
+            className='relative group flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors'>
+            {/* Icon Mũi tên */}
+            <ArrowLeft size={16} />
+
+            {/* Tooltip: Back Home */}
+            <span className='absolute bottom-[-30px] sm:bottom-auto sm:left-full ml-2 px-2 py-1 bg-fuchsia-100 text-xs rounded shadow-md whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300'>
+              Back home
+            </span>
+          </Link>
+        </div>
         {/* FORM CONTAINER */}
         <FormProvider {...form}>
           <div className='flex flex-col gap-4 md:gap-5 my-6'>

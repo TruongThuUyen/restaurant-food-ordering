@@ -12,4 +12,12 @@ const addToCart = (cartItem: ICartRequest) => {
   return AxiosClient.post(END_POINT.CART.ADD_TO_CART, cartItem);
 };
 
-export { addToCart, getCartByUserId };
+const decreaseItemQuantity = (params: { _id: string; productId: string; productSize: string }) => {
+  return AxiosClient.post(END_POINT.CART.DECREASE, params);
+};
+
+const removeItem = (params: { _id: string; productId: string; productSize: string }) => {
+  return AxiosClient.post(END_POINT.CART.REMOVE_ITEM, params);
+};
+
+export { addToCart, getCartByUserId, decreaseItemQuantity, removeItem };
