@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Error handler
 export const getErrorMessage = (error: unknown): string => {
-  const message = 'Failed to process the request';
+  const message = 'Something went wrong!';
 
   // If it's an Axios error
   if (axios.isAxiosError(error)) {

@@ -7,7 +7,7 @@ export interface IProduct {
   price: number;
   isAvailable: boolean;
   category: string;
-  ingredients: [string];
+  ingredients: string[];
   imageUrl: string;
   altText: string;
   rating: number;

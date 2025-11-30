@@ -20,7 +20,7 @@ export interface ICart {
 
 export interface ICartRequest {
   userId: string;
-  items: ItemProduct[];
+  items: Partial<ItemProduct>[];
   serviceCost: number;
   deliveryCost: number;
 }

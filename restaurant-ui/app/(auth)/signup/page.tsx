@@ -157,12 +157,6 @@ const SignUp = () => {
             Sign in
           </Link>
         </div>
-
-        {/* <div className='flex gap-1 items-center'>
-          <Link href={RoutesName.HOME} className='inline-block text-sm underline text-cyan-800'>
-            Back home
-          </Link>
-        </div> */}
       </div>
     </div>
   );

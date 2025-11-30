@@ -1,11 +1,14 @@
 'use client';
-import { getCartByUserId } from '@/api/cart';
-import { ICart } from '@/models/cart.model';
-import { IResponseError } from '@/models/response.model';
+import { addToCart, decreaseItemQuantity, getCartByUserId, removeItem } from '@/api/cart';
+import { getProductById } from '@/api/products';
+import { ICart, ItemProduct } from '@/models/cart.model';
+import { IProduct } from '@/models/product.model';
+import { IResponse, IResponseError } from '@/models/response.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
-import { getSessionStorage, STORAGE } from '@/utils/storage';
+import { getFinalPrice, subTotal, totalCost } from '@/utils/functions';
+import { getSessionStorage, setSessionStorage, STORAGE } from '@/utils/storage';
 import { useUser } from '@/utils/useUser';
 import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
@@ -69,19 +72,106 @@ const CartPage = () => {
     }
   };
 
+  const handleProductQuantity = async (add: boolean, product: ItemProduct) => {
+    if (userProfile) {
+      try {
+        let newCart: ICart | undefined = undefined;
+        if (!add) {
+          const reqBody = {
+            _id: cart._id,
+            productId: product.productId,
+            productSize: product.size,
+          };
+
+          const response = await decreaseItemQuantity(reqBody);
+          newCart = response.data;
+        } else {
+          const reqBody = {
+            userId: cart.userId,
+            items: [
+              {
+                foodName: product.foodName,
+                productId: product.productId,
+                quantity: 1,
+                size: product.size,
+              },
+            ],
+            deliveryCost: 0,
+            serviceCost: 0,
+          };
+          const response = await addToCart(reqBody);
+          newCart = response.data;
+        }
+        if (!!newCart) setCart(newCart);
+      } catch (error) {
+        notify(`${getErrorMessage(error)}\nPlease try again!`, 'error');
+      }
+    } else {
+      // Remove item in storage
+      const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
+      if (cartFromStorage) {
+        const cart: ICart = JSON.parse(cartFromStorage);
+
+        const index = cart.items.findIndex(
+          (item) => item.productId === product.productId && item.size === product.size
+        );
+        if (index !== -1) {
+          if (add) {
+            cart.items[index].quantity += 1;
+          } else {
+            if (cart.items[index].quantity > 1) {
+              cart.items[index].quantity -= 1;
+            } else {
+              cart.items.splice(index, 1);
+            }
+          }
+          cart.subTotal = cart.items.reduce((total, product) => {
+            return total + product.price * product.quantity;
+          }, 0);
+          cart.totalCost = totalCost(cart.subTotal, cart.deliveryCost, cart.serviceCost);
+          setSessionStorage(STORAGE.USER_CART, JSON.stringify(cart));
+          setCart(cart);
+        } else {
+          notify('Something went wrong!\nPlease train again!', 'error');
+        }
+      }
+    }
+  };
+
+  const removeItemFromCart = async (productId: string, productSize: string) => {
+    if (userProfile) {
+      try {
+        const reqBody = {
+          _id: cart._id,
+          productId: productId,
+          productSize: productSize,
+        };
+        const response = await removeItem(reqBody);
+        if (response && response.data) {
+          const newCart: ICart = response.data;
+          setCart(newCart);
+        }
+      } catch (error) {
+        notify(`${getErrorMessage(error)}\nPlease try again!`, 'error');
+      }
+    }
+    // Remove item in storage
+  };
+
   return (
     <div className='h-[calc(100%-6rem)] md:h-[calc(100%-9rem)]'>
       {!!cart && cart?.items?.length > 0 ? (
         <div className='flex flex-col items-stretch text-red-500 lg:flex-row'>
           {/* PRODUCT CONTAINER */}
-          <div className='h-[calc(100vh/2)] px-4 py-4 flex flex-col justify-center lg:h-[calc(100vh*2/3)]  lg:w-2/3 lg:px-20 xl:px-30 '>
-            <div className='grid grid-cols-8 items-center font-bold text-red-500 text-lg border-b py-3'>
+          <div className='h-[calc(100vh/2)] px-4 py-4 flex flex-col justify-center lg:h-[calc(100vh*2/3)] lg:w-2/3 lg:px-18 xl:px-26'>
+            <div className='grid grid-cols-8 gap-4 items-center font-bold text-red-500 text-lg border-b py-3'>
               <span>Product</span>
               <span className='col-span-3 ml-7 sm:ml-3'>Food Name</span>
-              <span>Qty</span>
+              <span className='text-center'>Qty</span>
               <span>Price</span>
               <span>Total</span>
-              <span className='col-span-6'></span>
+              <span></span>
+              <span></span>
             </div>
             <div className='flex-1 overflow-y-auto mt-4'>
               {!!cart?.items &&
@@ -99,12 +189,26 @@ const CartPage = () => {
                     </div>
                     <div className='col-span-3 ml-7 sm:ml-3'>
                       <h1 className='uppercase text-sm md:text-xl font-bold'>{product.foodName}</h1>
-                      <span>Large</span>
+                      <span>{product.size}</span>
                     </div>
-                    <h2 className='font-bold'>{product.quantity}</h2>
+                    <div className='flex items-center gap-2 justify-center'>
+                      <button
+                        className='w-6 h-5 cursor-pointer hover:bg-[#f5f5f5] flex items-center justify-center'
+                        onClick={() => handleProductQuantity(false, product)}>
+                        -
+                      </button>
+                      <span className='inline-block font-bold'>{product.quantity}</span>
+                      <button
+                        className='w-6 h-5 cursor-pointer hover:bg-[#f5f5f5] flex items-center justify-center'
+                        onClick={() => handleProductQuantity(true, product)}>
+                        +
+                      </button>
+                    </div>
                     <h2 className='font-bold'>{product.price.toFixed(2)}</h2>
                     <h2 className='font-bold'>{(product.price * product.quantity).toFixed(2)}</h2>
-                    <p className='flex items-center justify-center w-5 h-5 hover:bg-fuchsia-100 cursor-pointer'>
+                    <p
+                      className='flex items-center justify-center w-6 h-6 hover:bg-fuchsia-100 cursor-pointer'
+                      onClick={() => removeItemFromCart(product.productId, product.size)}>
                       <span>x</span>
                     </p>
                   </div>
@@ -113,7 +217,7 @@ const CartPage = () => {
           </div>
 
           {/* PAYMENT CONTAINER */}
-          <div className='px-4 py-6 bg-fuchsia-100 flex flex-col gap-4 justify-center w-full lg:w-1/3 xl:px-30 2xl:text-xl 2xl:gap-6'>
+          <div className='px-4 py-6 bg-fuchsia-100 flex flex-col gap-4 justify-center w-full lg:w-1/3 xl:px-26 2xl:text-xl 2xl:gap-6'>
             <div className='flex justify-between'>
               <span className=''>Subtotal ({cart.items.length} items)</span>
               <span className=''>${cart.subTotal}</span>
