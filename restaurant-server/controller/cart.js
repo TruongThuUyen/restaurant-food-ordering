@@ -85,7 +85,7 @@ const removeItem = async (req, res) => {
     if (!cart)
       return res.status(400).json({ status: 4000, success: true, message: 'Cart not found!' });
 
-    const response = await cartService.removeItem(cart, req.body.productId2, req.body.productSize);
+    const response = await cartService.removeItem(cart, req.body.productId, req.body.productSize);
     if (response === 1) {
       res.status(200).json({
         status: 2000,
