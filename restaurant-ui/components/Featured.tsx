@@ -7,6 +7,16 @@ import CartButton from './button/cart/CartButton';
 const Featured = ({ products }: { products: IProduct[] | [] }) => {
   const [selectedSize, setSelectedSize] = useState<Record<string, ProductSize>>({});
 
+  const FinalPrice = (product: IProduct, size: string) => {
+    if (product?.options) {
+      const filteredItem = product?.options.find((opt) => opt.title === size);
+      if (filteredItem) {
+        return (filteredItem.additionalPrice + product.price).toFixed(2);
+      }
+    }
+    return product.price;
+  };
+
   return (
     <div className='w-screen overflow-x-scroll text-red-500'>
       {/* WRAPPER */}
@@ -44,7 +54,9 @@ const Featured = ({ products }: { products: IProduct[] | [] }) => {
                     </select>
                   )}
 
-                  <span className='text-xl font-bold xl:text-2xl 2xl:text-3xl'>{item.price}</span>
+                  <span className='text-xl font-bold xl:text-2xl 2xl:text-3xl'>
+                    {FinalPrice(item, selectedSize[item._id] ?? 'Medium')}
+                  </span>
                 </div>
                 <CartButton product={item} size={selectedSize[item._id] ?? 'Medium'} />
               </div>

@@ -69,6 +69,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
       /* --------- GET CART FROM SESSION STORAGE ----------- */
       const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
       if (!!cartFromStorage) {
+        console.log('cart has error');
         const cartData = JSON.parse(cartFromStorage);
 
         // Merge cart from sessionStorage to DB
@@ -86,6 +87,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
           removeSessionStorage(STORAGE.USER_CART);
         }
       }
+      console.log('cart:: ', cartFromStorage);
     } catch (error) {
       notify(getErrorMessage(error), 'error');
     }

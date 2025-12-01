@@ -29,7 +29,7 @@ const CartButton = ({ product, size }: CartButtonProps) => {
 
     setTimeout(() => {
       setIsClicked(false);
-    }, 3300);
+    }, 2500);
 
     const cartItem: ItemProduct = {
       foodName: product.foodName,
@@ -76,15 +76,12 @@ const CartButton = ({ product, size }: CartButtonProps) => {
       // Get cart from sessionStorage
       if (userCart) {
         carts = JSON.parse(userCart);
-        const filteredItems = carts.items.filter((item) => item.productId === cartItem.productId);
+        const index = carts.items.findIndex(
+          (item) => item.productId === cartItem.productId && item.size === size
+        );
 
-        if (filteredItems.length > 0) {
-          const index = filteredItems.findIndex((item) => item.size === size);
-
-          // If item has same size
-          if (index !== -1) {
-            carts.items[index].quantity += 1;
-          } else carts.items.push(cartItem);
+        if (index !== -1) {
+          carts.items[index].quantity += 1;
         } else {
           carts.items.push(cartItem);
         }

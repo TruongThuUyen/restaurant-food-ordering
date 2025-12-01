@@ -1,14 +1,17 @@
 'use client';
 import { addToCart, decreaseItemQuantity, getCartByUserId, removeItem } from '@/api/cart';
-import { getProductById } from '@/api/products';
 import { ICart, ItemProduct } from '@/models/cart.model';
-import { IProduct } from '@/models/product.model';
-import { IResponse, IResponseError } from '@/models/response.model';
+import { IResponseError } from '@/models/response.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
-import { getFinalPrice, subTotal, totalCost } from '@/utils/functions';
-import { getSessionStorage, setSessionStorage, STORAGE } from '@/utils/storage';
+import { totalCost } from '@/utils/functions';
+import {
+  getSessionStorage,
+  removeSessionStorage,
+  setSessionStorage,
+  STORAGE,
+} from '@/utils/storage';
 import { useUser } from '@/utils/useUser';
 import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
@@ -125,11 +128,16 @@ const CartPage = () => {
               cart.items.splice(index, 1);
             }
           }
-          cart.subTotal = cart.items.reduce((total, product) => {
-            return total + product.price * product.quantity;
-          }, 0);
-          cart.totalCost = totalCost(cart.subTotal, cart.deliveryCost, cart.serviceCost);
-          setSessionStorage(STORAGE.USER_CART, JSON.stringify(cart));
+          // If items in cart is empty -> remove cart
+          if (cart.items.length === 0) {
+            removeSessionStorage(STORAGE.USER_CART);
+          } else {
+            cart.subTotal = cart.items.reduce((total, product) => {
+              return total + product.price * product.quantity;
+            }, 0);
+            cart.totalCost = totalCost(cart.subTotal, cart.deliveryCost, cart.serviceCost);
+            setSessionStorage(STORAGE.USER_CART, JSON.stringify(cart));
+          }
           setCart(cart);
         } else {
           notify('Something went wrong!\nPlease train again!', 'error');
@@ -154,8 +162,32 @@ const CartPage = () => {
       } catch (error) {
         notify(`${getErrorMessage(error)}\nPlease try again!`, 'error');
       }
+    } else {
+      const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
+      if (cartFromStorage) {
+        const cart = JSON.parse(cartFromStorage) as ICart;
+        const index = cart.items.findIndex(
+          (item) => item.productId === productId && item.size === productSize
+        );
+        if (index !== -1) {
+          cart.items.splice(index, 1);
+        } else {
+          notify(`Cannot remove item from cart!\nPlease try again!`, 'error');
+        }
+
+        // If items in cart is empty -> remove cart
+        if (cart.items.length === 0) {
+          removeSessionStorage(STORAGE.USER_CART);
+        } else {
+          cart.subTotal = cart.items.reduce((total, product) => {
+            return total + product.price * product.quantity;
+          }, 0);
+          cart.totalCost = totalCost(cart.subTotal, cart.deliveryCost, cart.serviceCost);
+          setSessionStorage(STORAGE.USER_CART, JSON.stringify(cart));
+        }
+        setCart(cart);
+      }
     }
-    // Remove item in storage
   };
 
   return (
@@ -220,7 +252,7 @@ const CartPage = () => {
           <div className='px-4 py-6 bg-fuchsia-100 flex flex-col gap-4 justify-center w-full lg:w-1/3 xl:px-26 2xl:text-xl 2xl:gap-6'>
             <div className='flex justify-between'>
               <span className=''>Subtotal ({cart.items.length} items)</span>
-              <span className=''>${cart.subTotal}</span>
+              <span className=''>${cart.subTotal.toFixed(2)}</span>
             </div>
             <div className='flex justify-between'>
               <span className=''>Service Cost </span>
@@ -236,7 +268,7 @@ const CartPage = () => {
 
             <div className='flex justify-between'>
               <span className='uppercase text-xl'> Total(incl vat)</span>
-              <span className='text-red-500 font-bold'>{cart.totalCost}</span>
+              <span className='text-red-500 font-bold'>{cart.totalCost.toFixed(2)}</span>
             </div>
             <button
               onClick={() => checkout()}
