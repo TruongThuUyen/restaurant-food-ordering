@@ -28,7 +28,7 @@ export const addItemToCartAction = async ({
 
   const cartItem: ItemProduct = {
     foodName: product.foodName,
-    price: getFinalPrice(product, size),
+    price: Number(getFinalPrice(product, size)),
     productId: product._id,
     quantity: 1,
     productImage: product.imageUrl,
