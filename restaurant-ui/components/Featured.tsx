@@ -2,7 +2,7 @@
 import { IProduct, ProductSize } from '@/models/product.model';
 import Image from 'next/image';
 import { useState } from 'react';
-import CartButton from './button/cart/CartButton';
+import { CartButton } from './button/cart/CartButton';
 
 const Featured = ({ products }: { products: IProduct[] | [] }) => {
   const [selectedSize, setSelectedSize] = useState<Record<string, ProductSize>>({});
