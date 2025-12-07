@@ -7,25 +7,25 @@
 
 .cart-button-custom .box-icon-custom {
   z-index: 1;
-  top: -10%;
+  top: -11%;
   left: 53%;
   transform: translate(-50%, -50%);
 }
 
 .cart-button-custom.clicked .cart-icon-custom {
-  animation: cart-move 2s ease-in forwards;
+  animation: cart-move 1.5s ease-in forwards;
 }
 
 .cart-button-custom.clicked .box-icon-custom {
-  animation: box-move 2s ease-in forwards;
+  animation: box-move 1.5s ease-in forwards;
 }
 
 .cart-button-custom.clicked .add-to-cart {
-  animation: addcart-fade 2s ease-in forwards;
+  animation: addcart-fade 1.5s ease-in forwards;
 }
 
 .cart-button-custom.clicked .added-text {
-  animation: added-fade 2s ease-in forwards;
+  animation: added-fade 1.5s ease-in forwards;
 }
 
 @keyframes cart-move {

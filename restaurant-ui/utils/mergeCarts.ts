@@ -1,5 +1,5 @@
 import { addToCart, getCartByUserId } from '@/api/cart';
-import { ICart, ICartRequest } from '@/models/cart.model';
+import { ICartRequest } from '@/models/cart.model';
 
 export const getCart = async (userId: string) => {
   try {

@@ -1,35 +1,35 @@
 'use client';
 
-import { RoutesName } from '@/routes/contanst';
-import { getSessionStorage, STORAGE } from '@/utils/storage';
-import { useRouter } from 'next/navigation';
+import { addItemToCartAction, CartAddItemParams } from '@/utils/handleCart';
+import { CheckIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-type Props = {
-  id: string;
-  price: number;
-  options?: {
-    title: string;
-    additionalPrice: number;
-  }[];
-};
+type Props = Omit<CartAddItemParams, 'size'>;
 
-const Price = ({ price, id, options }: Props) => {
-  const router = useRouter();
+const PriceByProductAndSize = ({ product, userProfile, notify }: Props) => {
   const [quantity, setQuantity] = useState(1);
   const [selected, setSelected] = useState(0);
+  const [isAdded, setIsAdded] = useState(false);
 
   const total = useMemo(() => {
-    if (options && options[selected]) return quantity * (price + options[selected].additionalPrice);
+    if (product.options && product.options[selected])
+      return quantity * (product.price + product.options[selected].additionalPrice);
     else {
-      return quantity * price;
+      return quantity * product.price;
     }
-  }, [quantity, selected, options, price]);
+  }, [quantity, selected, product.options, product.price]);
 
-  const AddProduct = (id: string, quantity: number) => {
-    const token = getSessionStorage(STORAGE.USER_TOKEN);
-    if (!token) {
-      router.push(RoutesName.LOGIN);
+  const addProduct = async () => {
+    if (isAdded) return;
+    if (product.options) {
+      const size = product.options[selected].title ?? 'Medium';
+      const response = await addItemToCartAction({ product, size, userProfile, notify });
+      if (response) {
+        setIsAdded(true);
+        setTimeout(() => {
+          setIsAdded(false);
+        }, 1000);
+      }
     }
   };
 
@@ -38,7 +38,7 @@ const Price = ({ price, id, options }: Props) => {
       <h2 className='text-2xl font-bold'>{total.toFixed(2)}</h2>
       {/* OPTIONS CONTAINER */}
       <div className='flex gap-4'>
-        {options?.map((option, index) => (
+        {product.options?.map((option, index) => (
           <button
             key={option.title}
             className='min-w-[6rem] p-2 ring-1 ring-red-400 rounded-md cursor-pointer'
@@ -67,14 +67,22 @@ const Price = ({ price, id, options }: Props) => {
               onClick={() => setQuantity((prev) => (prev === 9 ? 9 : prev + 1))}>{`>`}</button>
           </div>
         </div>
-        <button
-          className='uppercase w-56 bg-red-500 text-white p-3 ring-1 ring-red-500 cursor-pointer'
-          onClick={() => AddProduct(id, quantity)}>
-          Add to Card
-        </button>
+
+        {!isAdded ? (
+          <button
+            className='uppercase w-56 bg-red-500 text-white p-3 ring-1 ring-red-500 cursor-pointer'
+            onClick={() => addProduct()}>
+            Add to Card
+          </button>
+        ) : (
+          <div className='capitalize w-56 bg-red-500 text-white p-3 ring-1 ring-red-500 cursor-pointer flex gap-2 items-center justify-center'>
+            <CheckIcon size={21} />
+            added
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Price;
+export default PriceByProductAndSize;
