@@ -23,7 +23,7 @@ const PriceByProductAndSize = ({ product, userProfile, notify }: Props) => {
     if (isAdded) return;
     if (product.options) {
       const size = product.options[selected].title ?? 'Medium';
-      const response = await addItemToCartAction({ product, size, userProfile, notify });
+      const response = await addItemToCartAction({ product, size, quantity, userProfile, notify });
       if (response) {
         setIsAdded(true);
         setTimeout(() => {
@@ -63,7 +63,7 @@ const PriceByProductAndSize = ({ product, userProfile, notify }: Props) => {
               onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}>{`<`}</button>
             <span>{quantity}</span>
             <button
-              className={`${quantity >= 9 ? 'cursor-default opacity-50' : 'cursor-pointer'}`}
+              className='cursor-pointer'
               onClick={() => setQuantity((prev) => (prev === 9 ? 9 : prev + 1))}>{`>`}</button>
           </div>
         </div>
