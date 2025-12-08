@@ -36,6 +36,9 @@ const SignUp = () => {
     defaultValues: {
       email: '',
       password: '',
+      fullName: '',
+      city: undefined,
+      address: '',
     },
     resolver: yupResolver(schema),
   });
