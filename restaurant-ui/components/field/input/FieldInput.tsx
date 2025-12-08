@@ -9,7 +9,7 @@ type Props = {
   type: string;
 };
 
-export const FiledInput: React.FC<Props> = ({ name, placeholder, required, ...props }) => {
+export const FieldInput: React.FC<Props> = ({ name, placeholder, required, ...props }) => {
   const {
     register,
     formState: { errors },

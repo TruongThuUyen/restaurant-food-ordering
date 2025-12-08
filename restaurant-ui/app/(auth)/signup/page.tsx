@@ -1,24 +1,34 @@
 'use client';
 import { register } from '@/api/auth';
+import { getCities } from '@/api/city';
 import FieldError from '@/components/field/error/FieldError';
-import { FiledInput } from '@/components/field/input/FieldInput';
-import { FiledSelect } from '@/components/field/select/FieldSelect';
-import { IResponseError } from '@/models/response.model';
+import { FieldInput } from '@/components/field/input/FieldInput';
+import { FieldSelect } from '@/components/field/select/FieldSelect';
+import { ICity } from '@/models/city.model';
 import { IRegister } from '@/models/user.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
+import { cityList } from '@/utils/data';
 import { getErrorMessage } from '@/utils/errorHandle';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
 import { ArrowLeft, EyeClosed, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import schema from './schema';
 
+function isCityList(obj: unknown): obj is ICity[] {
+  return (
+    Array.isArray(obj) &&
+    obj.every((item) => item && typeof item.label === 'string' && typeof item.value === 'string')
+  );
+}
+
 const SignUp = () => {
   const [showPass, setShowPass] = useState(false);
+  const [cities, setCities] = useState<ICity[]>([]);
+
   const { notify } = useNotify();
   const router = useRouter();
 
@@ -30,6 +40,24 @@ const SignUp = () => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    const fetchCity = async () => {
+      try {
+        const response = await getCities();
+        if (response && typeof response === 'object' && 'data' in response) {
+          if (!isCityList(response.data)) {
+            throw new Error('Something when wrong!');
+          }
+        }
+      } catch (error) {
+        setCities(cityList);
+        notify(getErrorMessage(error), 'error');
+      }
+    };
+
+    fetchCity();
+  }, []);
+
   const onSubmit: SubmitHandler<IRegister> = async (data) => {
     try {
       const response = await register(data);
@@ -40,16 +68,7 @@ const SignUp = () => {
         }, 2000);
       }
     } catch (error) {
-      let errorMessage = getErrorMessage(error);
-      if (axios.isAxiosError(error)) {
-        const serverError = error.response?.data as IResponseError;
-
-        if (serverError) {
-          errorMessage = serverError.message;
-        }
-      }
-
-      notify(errorMessage, 'error');
+      notify(getErrorMessage(error), 'error');
     }
   };
 
@@ -63,10 +82,8 @@ const SignUp = () => {
           <Link
             href={RoutesName.HOME}
             className='relative group flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors'>
-            {/* Icon Mũi tên */}
             <ArrowLeft size={16} />
 
-            {/* Tooltip: Back Home */}
             <span className='absolute bottom-[-30px] sm:bottom-auto sm:left-full ml-2 px-2 py-1 bg-fuchsia-100 text-xs rounded shadow-md whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300'>
               Back home
             </span>
@@ -77,7 +94,7 @@ const SignUp = () => {
           <div className='flex flex-col gap-4 md:gap-5 my-6'>
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Full name</p>
-              <FiledInput
+              <FieldInput
                 name='fullName'
                 placeholder='Enter your fullname'
                 type='text'
@@ -88,7 +105,7 @@ const SignUp = () => {
             </div>
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Email address</p>
-              <FiledInput
+              <FieldInput
                 name='email'
                 placeholder='Enter your email'
                 type='text'
@@ -101,7 +118,7 @@ const SignUp = () => {
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Password</p>
               <div className='w-full relative'>
-                <FiledInput
+                <FieldInput
                   name='password'
                   placeholder='Enter your password'
                   type={showPass ? 'text' : 'password'}
@@ -124,14 +141,14 @@ const SignUp = () => {
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Choose your city</p>
               <div className='w-full relative'>
-                <FiledSelect name='city' placeholder='Select your city' />
+                <FieldSelect name='city' placeholder='Select your city' options={cities} />
               </div>
               <FieldError name='city' />
             </div>
 
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Address</p>
-              <FiledInput
+              <FieldInput
                 name='address'
                 placeholder='Enter your address'
                 type='text'
