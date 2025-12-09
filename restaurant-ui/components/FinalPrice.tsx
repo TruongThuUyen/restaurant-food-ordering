@@ -15,7 +15,7 @@ const FinalPriceComponent = ({ product, size, className }: Props) => {
     return price;
   }, [product, size]);
 
-  return <p className={className}>{finalPrice.toFixed(2)}</p>;
+  return <p className={className}>{finalPrice}</p>;
 };
 
 export const FinalPrice = React.memo(FinalPriceComponent);

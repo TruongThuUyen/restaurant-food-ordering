@@ -15,6 +15,9 @@ const END_POINT = {
     DECREASE: '/cart/items/decrease',
     REMOVE_ITEM: '/cart/items/remove',
   },
+  CITY: {
+    GET_ALL: `/cities`,
+  },
 };
 
 export default END_POINT;

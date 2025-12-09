@@ -9,7 +9,7 @@ type Props = {
   type: string;
 };
 
-export const FiledInput: React.FC<Props> = ({ name, placeholder, required, ...props }) => {
+const FieldInputComponent: React.FC<Props> = ({ name, placeholder, required, ...props }) => {
   const {
     register,
     formState: { errors },
@@ -26,3 +26,5 @@ export const FiledInput: React.FC<Props> = ({ name, placeholder, required, ...pr
     </div>
   );
 };
+
+export const FieldInput = React.memo(FieldInputComponent);

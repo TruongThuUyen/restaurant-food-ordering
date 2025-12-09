@@ -11,6 +11,7 @@ var citiesRouter = require('./routes/city');
 var authRouter = require('./routes/auth');
 var cartRouter = require('./routes/cart');
 var orderRouter = require('./routes/order');
+var tableRouter = require('./routes/table');
 
 // Connect to databse
 connectDB();
@@ -41,14 +42,11 @@ app.use('/api/cities', citiesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/order', orderRouter);
+app.use('/api/table', tableRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
 });
 
 // error handler

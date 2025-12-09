@@ -9,6 +9,7 @@ import { getFinalPrice, subTotal, totalCost } from './functions';
 export type CartAddItemParams = {
   product: IProduct;
   size: ProductSize;
+  quantity?: number;
   userProfile: IUser | null;
   notify: (
     message: string,
@@ -20,6 +21,7 @@ export type CartAddItemParams = {
 export const addItemToCartAction = async ({
   product,
   size,
+  quantity = 1,
   userProfile,
   notify,
 }: CartAddItemParams) => {
@@ -28,9 +30,9 @@ export const addItemToCartAction = async ({
 
   const cartItem: ItemProduct = {
     foodName: product.foodName,
-    price: getFinalPrice(product, size),
+    price: Number(getFinalPrice(product, size)),
     productId: product._id,
-    quantity: 1,
+    quantity: quantity ?? 1,
     productImage: product.imageUrl,
     size: size,
   };
@@ -72,14 +74,14 @@ export const addItemToCartAction = async ({
       );
 
       if (index !== -1) {
-        carts.items[index].quantity += 1;
+        carts.items[index].quantity += quantity;
       } else {
         carts.items.push(cartItem);
       }
 
       // If cart not exists in Storage
     } else {
-      cartItem.quantity = 1;
+      cartItem.quantity = quantity;
       carts.items.push(cartItem);
     }
 

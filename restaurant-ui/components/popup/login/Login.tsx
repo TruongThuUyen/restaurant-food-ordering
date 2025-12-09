@@ -2,7 +2,7 @@
 import { login } from '@/api/auth';
 import schema from '@/app/(auth)/login/schema';
 import FieldError from '@/components/field/error/FieldError';
-import { FiledInput } from '@/components/field/input/FieldInput';
+import { FieldInput } from '@/components/field/input/FieldInput';
 import { ICartRequest, ItemProduct } from '@/models/cart.model';
 import { ILogin } from '@/models/user.model';
 import { useNotify } from '@/providers/NotifyProvider';
@@ -69,7 +69,6 @@ const LoginModal = ({ onClose }: ModalProps) => {
       /* --------- GET CART FROM SESSION STORAGE ----------- */
       const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
       if (!!cartFromStorage) {
-        console.log('cart has error');
         const cartData = JSON.parse(cartFromStorage);
 
         // Merge cart from sessionStorage to DB
@@ -87,7 +86,6 @@ const LoginModal = ({ onClose }: ModalProps) => {
           removeSessionStorage(STORAGE.USER_CART);
         }
       }
-      console.log('cart:: ', cartFromStorage);
     } catch (error) {
       notify(getErrorMessage(error), 'error');
     }
@@ -106,7 +104,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
           <div className='flex flex-col gap-4 md:gap-5 my-6'>
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Email address</p>
-              <FiledInput
+              <FieldInput
                 name='email'
                 placeholder='Enter your email'
                 type='text'
@@ -118,7 +116,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
             <div className='flex-1'>
               <p className='text-[#929194] text-sm my-1'>Password</p>
               <div className='w-full relative'>
-                <FiledInput
+                <FieldInput
                   name='password'
                   placeholder='Enter your password'
                   type={showPass ? 'text' : 'password'}
