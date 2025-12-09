@@ -2,14 +2,15 @@ const mongoose = require('mongoose');
 
 const TableSchema = new mongoose.Schema(
   {
-    tableNumber: { type: Number, required: true, unique: true },
+    value: { type: String, required: true, unique: true },
+    lable: { type: String, required: true, unique: true },
     status: { type: String, enum: ['available', 'occupied'], default: 'available' },
   },
   {
     timestamps: true,
   },
   {
-    collection: 'products',
+    collection: 'table',
   }
 );
 
