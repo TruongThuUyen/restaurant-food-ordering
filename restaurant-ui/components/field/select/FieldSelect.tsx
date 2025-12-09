@@ -10,7 +10,7 @@ interface Props {
   options: ISelectOption[];
 }
 
-export const FieldSelect: React.FC<Props> = ({ name, placeholder, options, ...props }) => {
+const FieldSelectComponent: React.FC<Props> = ({ name, placeholder, options, ...props }) => {
   const { control } = useFormContext();
 
   return (
@@ -25,10 +25,12 @@ export const FieldSelect: React.FC<Props> = ({ name, placeholder, options, ...pr
             className='select-wrapper'
             placeholder={placeholder}
             value={selectedValue}
-            onChange={(selectOption) => field.onChange(selectOption?.value)}
+            onChange={(selectOption) => field.onChange((selectOption as ISelectOption)?.value)}
             onBlur={field.onBlur}
           />
         );
       }}></Controller>
   );
 };
+
+export const FieldSelect = React.memo(FieldSelectComponent);
