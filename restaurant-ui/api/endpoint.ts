@@ -18,6 +18,10 @@ const END_POINT = {
   CITY: {
     GET_ALL: `/cities`,
   },
+  TABEL: {
+    GET_TABLES_AVAILABLE: 'table/available',
+    UPDATE_STATUS: '/table',
+  },
 };
 
 export default END_POINT;

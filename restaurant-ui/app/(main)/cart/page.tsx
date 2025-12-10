@@ -1,5 +1,6 @@
 'use client';
 import { addToCart, decreaseItemQuantity, getCartByUserId, removeItem } from '@/api/cart';
+import { CheckoutConfirmationModal } from '@/components/popup/cart/CheckoutConfirmationModal';
 import { ICart, ItemProduct } from '@/models/cart.model';
 import { IResponseError } from '@/models/response.model';
 import { useNotify } from '@/providers/NotifyProvider';
@@ -33,8 +34,9 @@ const defaultCart: ICart = {
 
 const CartPage = () => {
   const [cart, setCart] = useState<ICart>(defaultCart);
-  const { notify } = useNotify();
+  const [showCheckoutModal, setShowCheckoutModal] = useState(true);
   const router = useRouter();
+  const { notify } = useNotify();
   const { userProfile } = useUser();
 
   useEffect(() => {
@@ -73,6 +75,7 @@ const CartPage = () => {
     if (!userProfile) {
       router.push(RoutesName.LOGIN);
     }
+    setShowCheckoutModal(true);
   };
 
   const handleProductQuantity = async (add: boolean, product: ItemProduct) => {
@@ -291,6 +294,13 @@ const CartPage = () => {
             <Link href={RoutesName.HOME}>Return to shop</Link>
           </button>
         </div>
+      )}
+
+      {!!showCheckoutModal && (
+        <CheckoutConfirmationModal
+          isModalOpen={showCheckoutModal}
+          setIsModalOpen={setShowCheckoutModal}
+        />
       )}
     </div>
   );

@@ -1,4 +1,3 @@
-// Định nghĩa các hằng số cho Enum (tùy chọn)
 export type UserRole = 'user' | 'admin' | 'moderator';
 
 export interface IUser {
