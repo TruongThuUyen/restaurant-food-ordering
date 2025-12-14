@@ -34,7 +34,7 @@ const defaultCart: ICart = {
 
 const CartPage = () => {
   const [cart, setCart] = useState<ICart>(defaultCart);
-  const [showCheckoutModal, setShowCheckoutModal] = useState(true);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const router = useRouter();
   const { notify } = useNotify();
   const { userProfile } = useUser();
@@ -300,6 +300,7 @@ const CartPage = () => {
         <CheckoutConfirmationModal
           isModalOpen={showCheckoutModal}
           setIsModalOpen={setShowCheckoutModal}
+          cart={cart}
         />
       )}
     </div>

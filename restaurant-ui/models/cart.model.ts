@@ -24,3 +24,9 @@ export interface ICartRequest {
   serviceCost: number;
   deliveryCost: number;
 }
+
+export type CartItemRemovalRequest = {
+  _id: string;
+  productId: string;
+  productSize: string;
+};

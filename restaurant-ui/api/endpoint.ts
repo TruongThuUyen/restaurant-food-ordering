@@ -14,13 +14,18 @@ const END_POINT = {
     ADD_TO_CART: '/cart/merge',
     DECREASE: '/cart/items/decrease',
     REMOVE_ITEM: '/cart/items/remove',
+    REMOVE_ALL_ITEM: '/cart/remove-all',
   },
   CITY: {
     GET_ALL: `/cities`,
   },
-  TABEL: {
+  TABLE: {
     GET_TABLES_AVAILABLE: 'table/available',
     UPDATE_STATUS: '/table',
+  },
+  ORDER: {
+    GET_ORDERS_LIST_BY_USERID: 'order/:id',
+    ADD_ORDER_ITEM: '/orders',
   },
 };
 

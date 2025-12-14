@@ -1,13 +1,17 @@
 'use client';
 
-import { getTablesAvailable, updateState } from '@/api/table';
+import { getTablesAvailable } from '@/api/table';
 import FieldError from '@/components/field/error/FieldError';
 import { FieldSelect } from '@/components/field/select/FieldSelect';
-import { IResponse } from '@/models/response.model';
+import { ICart } from '@/models/cart.model';
 import { ITable, TABLE_STATUS } from '@/models/table.model';
 import { useNotify } from '@/providers/NotifyProvider';
+import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
+import { addOrderItemActions } from '@/utils/handleOrder';
+import { useUser } from '@/utils/useUser';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import ModalComponent from '../ModalComponent';
@@ -16,6 +20,7 @@ import schema from './schema';
 type ModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: (state: boolean) => void;
+  cart: ICart;
 };
 
 const isTableList = function isTableList(obj: unknown): obj is ITable[] {
@@ -29,9 +34,11 @@ const isTableList = function isTableList(obj: unknown): obj is ITable[] {
   );
 };
 
-export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen }: ModalProps) => {
+export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen, cart }: ModalProps) => {
   const [tables, setTables] = useState<ITable[] | null>(null);
   const { notify } = useNotify();
+  const { userProfile } = useUser();
+  const router = useRouter();
 
   const form = useForm({
     resolver: yupResolver(schema),
@@ -47,7 +54,6 @@ export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen }: Modal
         if (!isTableList(response.data)) {
           throw new Error('Some thing went wrong when fetch table');
         }
-
         setTables(response.data);
       } catch (error) {
         notify(getErrorMessage(error), 'error');
@@ -59,21 +65,22 @@ export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen }: Modal
 
   const onSubmit = async (data: { table: string }) => {
     try {
-      const response = await updateState({
-        value: data.table,
-        status: 'occupied',
-      });
-
-      if (
-        response &&
-        typeof response === 'object' &&
-        'message' in response &&
-        typeof (response as IResponse).message === 'string'
-      ) {
-        notify(response.message as string, 'success');
-        setTimeout(() => {
-          setIsModalOpen(false);
-        }, 1000);
+      if (userProfile && data.table) {
+        const table = tables?.find((table) => table.value === data.table);
+        if (table) {
+          const response = await addOrderItemActions({
+            cart,
+            tableId: table._id,
+            userId: userProfile._id,
+            notify,
+          });
+          if (response) {
+            setTimeout(() => {
+              router.push(RoutesName.ORDER);
+            }, 1000);
+            setIsModalOpen(false);
+          }
+        }
       }
     } catch (error) {
       notify(getErrorMessage(error), 'error');
