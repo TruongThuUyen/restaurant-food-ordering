@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { OrderStatus, ProductSize } = require('./utils');
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -7,13 +8,13 @@ const OrderSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    orderId: {
+      type: String,
+      require: true,
+    },
     tableId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Table',
-      required: true,
-    },
-    orderId: {
-      type: String,
       required: true,
     },
     date: {
@@ -26,15 +27,16 @@ const OrderSchema = new mongoose.Schema(
     },
     items: [
       {
-        name: { type: String, required: true },
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+        foodName: { type: String, required: true },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
+        size: { type: String, enum: ProductSize, require: true },
       },
     ],
     status: {
       type: String,
-      enum: ['pending', 'on_the_way', 'delivered', 'cancelled'],
-      default: 'pending',
+      enum: OrderStatus,
     },
   },
   {

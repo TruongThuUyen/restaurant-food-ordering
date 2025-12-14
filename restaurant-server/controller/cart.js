@@ -4,7 +4,6 @@ const cartService = require('../services/cartService');
 const getCart = async (req, res) => {
   try {
     const userId = req.body.userId;
-
     const cart = await cartService.getCart(userId);
     if (!cart) return res.status(200).json({ status: 4000, message: 'No item in cart!' });
 
@@ -103,4 +102,25 @@ const removeItem = async (req, res) => {
   }
 };
 
-module.exports = { getCart, mergeCart, decreaseItemQuantity, removeItem };
+const removeAllItemInCart = async (req, res) => {
+  try {
+    const cartId = req.body._id;
+    const cart = await Cart.findById(cartId);
+    if (!cart)
+      return res.status(400).json({ status: 4000, success: true, message: 'Cart not found!' });
+    else {
+      const response = await cartService.removeAllItemInCart(cart);
+      if (response) {
+        res.status(200).json({
+          status: 2000,
+          success: true,
+          data: response,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500);
+  }
+};
+
+module.exports = { getCart, mergeCart, decreaseItemQuantity, removeItem, removeAllItemInCart };

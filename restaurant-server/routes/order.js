@@ -1,19 +1,12 @@
-var express = require('express');
-require('dotenv').config();
+const express = require('express');
 var router = express.Router();
-const Order = require('../models/Order');
+const { insertOrderItem, updateOrderStatus } = require('../controller/order');
 
 /* GET list of orders */
-router.get('/', async (req, res) => {
-  try {
-    const listOfOrders = await Order.find();
-    res.status(200).json({
-      success: true,
-      data: listOfOrders,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error when get product!' });
-  }
-});
+router.get('/');
+
+router.post('/', insertOrderItem);
+
+router.patch('/:id', updateOrderStatus);
 
 module.exports = router;
