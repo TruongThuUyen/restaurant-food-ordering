@@ -42,7 +42,7 @@ const mergeCart = async (req, res) => {
       .status(200)
       .json({ status: 20001, success: true, message: 'Cart merged successfully', data: cart });
   } catch (error) {
-    res.status(500).json({ message: 'Error when add to cart!' });
+    return res.status(500).json({ message: 'Error when add to cart!' });
   }
 };
 
@@ -73,7 +73,7 @@ const decreaseItemQuantity = async (req, res) => {
       }
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error when remove item from cart!' });
+    return res.status(500).json({ message: 'Error when remove item from cart!' });
   }
 };
 
@@ -119,7 +119,7 @@ const removeAllItemInCart = async (req, res) => {
       }
     }
   } catch (error) {
-    res.status(500);
+    return res.status(500);
   }
 };
 

@@ -1,9 +1,13 @@
 const express = require('express');
 var router = express.Router();
-const { insertOrderItem, updateOrderStatus } = require('../controller/order');
+const {
+  insertOrderItem,
+  updateOrderStatus,
+  getOrdersListByUserID,
+} = require('../controller/order');
 
 /* GET list of orders */
-router.get('/');
+router.get('/users/:id', getOrdersListByUserID);
 
 router.post('/', insertOrderItem);
 

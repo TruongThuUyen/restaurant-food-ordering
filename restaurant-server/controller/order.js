@@ -4,15 +4,19 @@ const User = require('../models/User');
 const orderService = require('../services/orderService');
 const { OrderStatus } = require('../models/utils');
 
-const getOrderItemById = async (req, res) => {
+const getOrdersListByUserID = async (req, res) => {
   try {
-    const orderItem = Order.findOne({ userId: req.body.userId }, { createdAt: -1 });
-    if (!orderItem)
+    const ordersList = await Order.find({ userId: req.params.id }).sort({ createdAt: -1 });
+    if (!ordersList)
       return res
         .status(404)
         .json({ status: 4040, success: false, message: 'Sorry! Could not retrieve your order.' });
+
+    return res.status(200).json({ status: 2000, success: true, message: '', data: ordersList });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Sorry! Could not retrieve your order.' });
+    return res
+      .status(500)
+      .json({ success: false, message: 'Sorry! Could not retrieve your order.' });
   }
 };
 
@@ -42,11 +46,11 @@ const insertOrderItem = async (req, res) => {
       });
 
     const orderItem = await orderService.addOrderItem(req.body, table._id);
-    res
+    return res
       .status(200)
       .json({ status: 2000, data: orderItem, message: 'Your order has been confirmed!' });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ success: false, message: 'Sorry! Something went wrong while creating the order.' });
   }
@@ -67,12 +71,12 @@ const updateOrderStatus = async (req, res) => {
       return res.status(404).json({ status: 4040, success: false, message: 'Order not found!' });
 
     const response = await orderService.updateOrderItem(orderItem, req.body.status);
-    res.status(200).json({ status: 2000, success: true, data: response });
+    return res.status(200).json({ status: 2000, success: true, data: response });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ success: false, message: 'Sorry! Something went wrong while updating status.' });
   }
 };
 
-module.exports = { getOrderItemById, insertOrderItem, updateOrderStatus };
+module.exports = { getOrdersListByUserID, insertOrderItem, updateOrderStatus };

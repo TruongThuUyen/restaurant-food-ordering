@@ -1,7 +1,9 @@
 const Order = require('../models/Order');
+const { generateShortDate } = require('../utils/getDateTime');
 
 const addOrderItem = async (orderItem) => {
-  const orderId = `ORD-${Date.now()}-${orderItem.userId}`;
+  const shortId = generateShortDate + '-' + orderItem.userId.slice(-4);
+  const orderId = shortId;
   orderItem.orderId = orderId;
   await Order.insertOne(orderItem);
 };
