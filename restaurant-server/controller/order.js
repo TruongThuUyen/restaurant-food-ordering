@@ -3,6 +3,7 @@ const Table = require('../models/Table');
 const User = require('../models/User');
 const orderService = require('../services/orderService');
 const { OrderStatus } = require('../models/utils');
+const mongoose = require('mongoose');
 
 const getOrdersListByUserID = async (req, res) => {
   try {
@@ -21,7 +22,12 @@ const getOrdersListByUserID = async (req, res) => {
 };
 
 const insertOrderItem = async (req, res) => {
+  // Initial session
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
+    // Validate items in order from client
     if (req.body.items.length === 0)
       return res.status(400).json({
         status: 4000,
@@ -29,7 +35,9 @@ const insertOrderItem = async (req, res) => {
         message: 'The order must contain at least one item.',
       });
 
-    const table = await Table.findById(req.body.tableId);
+    // Validate table existence
+    const table = await Table.findById(req.body.table._id);
+    // Validate user existence
     const user = await User.findById(req.body.userId);
 
     if (!user) {
@@ -38,21 +46,37 @@ const insertOrderItem = async (req, res) => {
 
     if (!table) {
       return res.status(404).json({ status: 4040, success: false, message: 'Table not found!' });
-    } else if (table.status === 'occupied')
+    } else if (table.status === 'occupied') {
       return res.status(400).json({
         status: 4000,
         success: false,
         message: 'The selected table is currently occupied.',
       });
+    }
 
-    const orderItem = await orderService.addOrderItem(req.body, table._id);
+    table.status = 'occupied';
+
+    // Create new order
+    const orderItem = await orderService.addOrderItem(req.body, table);
+
+    // Update table status
+    await table.save({ session });
+
+    // Commit all
+    await session.commitTransaction();
+
     return res
       .status(200)
       .json({ status: 2000, data: orderItem, message: 'Your order has been confirmed!' });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: 'Sorry! Something went wrong while creating the order.' });
+    // Roleback if has error
+    await session.abortTransaction();
+    return res.status(500).json({
+      success: false,
+      message: error.message ?? 'Sorry! Something went wrong while creating the order.',
+    });
+  } finally {
+    session.endSession();
   }
 };
 

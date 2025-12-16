@@ -12,10 +12,11 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    tableId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Table',
-      required: true,
+    table: {
+      _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Table', required: true },
+      value: { type: String, required: false },
+      label: { type: String, required: false },
+      status: { type: String, enum: ['available', 'occupied'] },
     },
     date: {
       type: Date,
@@ -29,6 +30,7 @@ const OrderSchema = new mongoose.Schema(
       {
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
         foodName: { type: String, required: true },
+        productImage: { type: String, require: false },
         quantity: { type: Number, required: true },
         price: { type: Number, required: true },
         size: { type: String, enum: ProductSize, require: true },
