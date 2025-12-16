@@ -66,11 +66,11 @@ export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen, cart }:
   const onSubmit = async (data: { table: string }) => {
     try {
       if (userProfile && data.table) {
-        const table = tables?.find((table) => table.value === data.table);
+        const table: ITable | undefined = tables?.find((table) => table.value === data.table);
         if (table) {
           const response = await addOrderItemActions({
             cart,
-            tableId: table._id,
+            table: table,
             userId: userProfile._id,
             notify,
           });
@@ -88,24 +88,22 @@ export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen, cart }:
   };
 
   return (
-    <div className=''>
-      <ModalComponent
-        title={<h2 className='text-center text-2xl font-medium'>Checkout</h2>}
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isModalOpen}
-        onOk={form.handleSubmit(onSubmit)}
-        okText='Confirm checkout'
-        onCancel={() => setIsModalOpen(false)}>
-        {!!memoTable && (
-          <FormProvider {...form}>
-            <div className='modal-body w-full my-5'>
-              <label className='inline-block text-sm font-bold mb-1'>Table number</label>
-              <FieldSelect options={memoTable} name='table' placeholder='Select your table' />
-              <FieldError name='table' />
-            </div>
-          </FormProvider>
-        )}
-      </ModalComponent>
-    </div>
+    <ModalComponent
+      title={<h2 className='text-center text-2xl font-medium'>Checkout</h2>}
+      closable={{ 'aria-label': 'Custom Close Button' }}
+      open={isModalOpen}
+      onOk={form.handleSubmit(onSubmit)}
+      okText='Confirm checkout'
+      onCancel={() => setIsModalOpen(false)}>
+      {!!memoTable && (
+        <FormProvider {...form}>
+          <div className='modal-body w-full my-5'>
+            <label className='inline-block text-sm font-bold mb-1'>Table number</label>
+            <FieldSelect options={memoTable} name='table' placeholder='Select your table' />
+            <FieldError name='table' />
+          </div>
+        </FormProvider>
+      )}
+    </ModalComponent>
   );
 };

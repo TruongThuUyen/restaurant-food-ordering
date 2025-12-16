@@ -24,7 +24,7 @@ const END_POINT = {
     UPDATE_STATUS: '/table',
   },
   ORDER: {
-    GET_ORDERS_LIST_BY_USERID: 'order/:id',
+    GET_ORDERS_LIST_BY_USERID: (id: string) => `orders/users/${id}`,
     ADD_ORDER_ITEM: '/orders',
   },
 };

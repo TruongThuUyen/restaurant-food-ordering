@@ -19,4 +19,15 @@ const getFinalPrice = (product: IProduct, size: string) => {
   return (product.price + additional).toFixed(2);
 };
 
-export { subTotal, totalCost, getFinalPrice };
+const formatDate = (isoDate: Date) => {
+  const dateObject = new Date(isoDate);
+  const year = dateObject.getFullYear();
+  const month = dateObject.getMonth() + 1;
+  const day = dateObject.getDate();
+
+  const padZero = (num: number) => String(num).padStart(2, '0');
+  const formatDateTime = `${year}-${padZero(month)}-${padZero(day)}`;
+  return formatDateTime;
+};
+
+export { subTotal, totalCost, getFinalPrice, formatDate };
