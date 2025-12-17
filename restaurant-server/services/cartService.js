@@ -128,6 +128,14 @@ const removeItem = async (cart, productId, productSize) => {
   return 1;
 };
 
+const removeAllItemInCart = async (cart) => {
+  cart.items = [];
+  cart.subTotal = 0;
+  cart.totalCost = 0;
+  await cart.save();
+  return cart;
+};
+
 const subTotalCost = (productList) => {
   if (!productList) return 0;
   const subTotal = productList.reduce((total, productItem) => {
@@ -154,4 +162,5 @@ module.exports = {
   mergeCart,
   decreaseItemQuantity,
   removeItem,
+  removeAllItemInCart,
 };

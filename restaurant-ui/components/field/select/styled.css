@@ -3,4 +3,5 @@
   cursor: pointer;
   outline: none;
   font-size: 14px;
+  white-space: nowrap !important;
 }
