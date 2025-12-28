@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ProductSize } = require('./utils');
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -54,7 +55,7 @@ const ProductSchema = new mongoose.Schema(
           title: {
             type: String,
             required: true,
-            enum: ['Small', 'Medium', 'Large'],
+            enum: ProductSize,
           },
           additionalPrice: {
             type: Number,

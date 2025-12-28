@@ -1,6 +1,7 @@
 const Order = require('../models/Order');
 const Product = require('../models/Products');
 const { generateShortDate } = require('../utils/getDateTime');
+const { OrderStatus } = require('../models/utils');
 
 const addOrderItem = async (orderItem, table) => {
   if (!orderItem | !Array.isArray(orderItem.items)) {
@@ -41,8 +42,14 @@ const addOrderItem = async (orderItem, table) => {
 };
 
 const updateOrderItem = async (orderItem, status) => {
-  orderItem.status = status;
-  await orderItem.save();
+  if (!OrderStatus.includes(status)) throw new Error('Invalid order status!');
+
+  const updatedOrderItem = await Order.findByIdAndUpdate(orderItem._id, { status }, { new: true });
+  if (!updatedOrderItem) {
+    throw new Error('Order item not found!');
+  }
+
+  return updatedOrderItem;
 };
 
 module.exports = {

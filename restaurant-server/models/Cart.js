@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ProductSize } = require('./utils');
 
 const CartSchema = new mongoose.Schema(
   {
@@ -20,7 +21,7 @@ const CartSchema = new mongoose.Schema(
         productImage: { type: String },
         size: {
           type: String,
-          enum: ['Small', 'Medium', 'Large'],
+          enum: ProductSize,
           default: 'Medium',
           require: true,
         },

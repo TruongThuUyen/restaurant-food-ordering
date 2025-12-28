@@ -29,7 +29,7 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ status: 5000, success: false, message: error.message });
   }
 };
 
