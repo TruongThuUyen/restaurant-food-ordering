@@ -52,7 +52,7 @@ const SignUp = () => {
             throw new Error('Something when wrong!');
           }
         }
-        setCities(response.data);
+        setCities(response.data as ICity[]);
       } catch (error) {
         setCities(cityList);
         notify(getErrorMessage(error), 'error');
@@ -103,7 +103,7 @@ const SignUp = () => {
                 placeholder='Enter your fullname'
                 type='text'
                 required
-                className='w-full text-sm p-2 border-1 border-black/60 rounded-md outline-(--color-navy)'
+                className='w-full text-sm p-2 border border-black/60 rounded-md outline-(--color-navy)'
               />
               <FieldError name='fullName' />
             </div>
@@ -114,7 +114,7 @@ const SignUp = () => {
                 placeholder='Enter your email'
                 type='text'
                 required
-                className='w-full text-sm p-2 border-1 border-black/60 rounded-md outline-(--color-navy)'
+                className='w-full text-sm p-2 border border-black/60 rounded-md outline-(--color-navy)'
               />
               <FieldError name='email' />
             </div>
