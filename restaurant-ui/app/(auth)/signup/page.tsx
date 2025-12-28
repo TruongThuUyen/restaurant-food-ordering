@@ -52,6 +52,7 @@ const SignUp = () => {
             throw new Error('Something when wrong!');
           }
         }
+        setCities(response.data);
       } catch (error) {
         setCities(cityList);
         notify(getErrorMessage(error), 'error');

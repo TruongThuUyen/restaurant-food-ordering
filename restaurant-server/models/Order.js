@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { OrderStatus, ProductSize } = require('./utils');
+const { OrderStatus, ProductSize, TableStatus } = require('./utils');
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -16,7 +16,7 @@ const OrderSchema = new mongoose.Schema(
       _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Table', required: true },
       value: { type: String, required: false },
       label: { type: String, required: false },
-      status: { type: String, enum: ['available', 'occupied'] },
+      status: { type: String, enum: TableStatus },
     },
     date: {
       type: Date,

@@ -17,7 +17,7 @@ const getOrdersListByUserID = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ success: false, message: 'Sorry! Could not retrieve your order.' });
+      .json({ status: 5000, success: false, message: 'Sorry! Could not retrieve your order.' });
   }
 };
 
@@ -69,9 +69,10 @@ const insertOrderItem = async (req, res) => {
       .status(200)
       .json({ status: 2000, data: orderItem, message: 'Your order has been confirmed!' });
   } catch (error) {
-    // Roleback if has error
+    // Rollback if has error
     await session.abortTransaction();
     return res.status(500).json({
+      status: 5000,
       success: false,
       message: error.message ?? 'Sorry! Something went wrong while creating the order.',
     });
@@ -94,12 +95,16 @@ const updateOrderStatus = async (req, res) => {
     if (!orderItem)
       return res.status(404).json({ status: 4040, success: false, message: 'Order not found!' });
 
-    const response = await orderService.updateOrderItem(orderItem, req.body.status);
-    return res.status(200).json({ status: 2000, success: true, data: response });
+    const updatedOrderItem = await orderService.updateOrderItem(orderItem, req.body.status);
+    return res.status(200).json({ status: 2000, success: true, data: updatedOrderItem });
   } catch (error) {
     return res
       .status(500)
-      .json({ success: false, message: 'Sorry! Something went wrong while updating status.' });
+      .json({
+        status: 5000,
+        success: false,
+        message: 'Sorry! Something went wrong while updating status.',
+      });
   }
 };
 
