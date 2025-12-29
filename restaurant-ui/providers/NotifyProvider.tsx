@@ -91,17 +91,17 @@ export const NotifyProvider = ({ children }: { children: React.ReactNode }) => {
         <div
           ref={ref}
           className={`notify-wrapper
-            fixed z-99999 top-1/10 left-4 py-[10px] px-5 text-center rounded-md bg-gradient-to-r ${
+            fixed z-99999 top-1/10 left-4 py-2.5 px-5 text-center rounded-md bg-gradient-to-r ${
               typeToClass[notification.type].bg
             } to-white shadow-[0_-2px_10px_rgba(0,0,0,0.2),0_2px_10px_rgba(0,0,0,0.2)] opacity-100
           `}>
           <div className={`flex items-start gap-4  w-full h-full`}>
-            <span className='inline-block p-[6px] rounded-md shadow-[0_-2px_5px_rgba(0,0,0,0.2),0_2px_5px_rgba(0,0,0,0.2)]'>
+            <span className='inline-block p-1.5 rounded-md shadow-[0_-2px_5px_rgba(0,0,0,0.2),0_2px_5px_rgba(0,0,0,0.2)]'>
               {typeToClass[notification.type].icon}
             </span>
             <div className='flex flex-col gap-1 text-start'>
               <p className='font-bold capitalize'>{typeToClass[notification.type].title}</p>
-              <span className='text-sm text-[#444] whitespace-pre-line break-words'>
+              <span className='text-sm text-[#444] whitespace-pre-line wrap-break-word'>
                 {notification.message}
               </span>
             </div>
@@ -109,7 +109,7 @@ export const NotifyProvider = ({ children }: { children: React.ReactNode }) => {
               <span
                 className='absolute group inline-block top-2 right-2 p-1 hover:bg-[#bfbfbf] cursor-pointer rounded-full'
                 onClick={() => handleClose()}>
-                <XIcon className='group-hover:text-white size-4.5 top-[10px] right-[10px]' />
+                <XIcon className='group-hover:text-white size-4.5 top-2.5 right-2.5' />
               </span>
             </div>
           </div>

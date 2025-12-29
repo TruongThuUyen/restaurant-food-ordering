@@ -57,14 +57,7 @@ const CartPage = () => {
             setCart(response.data);
           }
         } catch (error) {
-          let errorMessage = getErrorMessage(error);
-          if (axios.isAxiosError(error)) {
-            const serverError = error.response?.data as IResponseError;
-            if (serverError) {
-              errorMessage = serverError.message;
-            }
-          }
-          notify(errorMessage, 'error');
+          notify(getErrorMessage(error), 'error');
         }
       };
       fetchCart();

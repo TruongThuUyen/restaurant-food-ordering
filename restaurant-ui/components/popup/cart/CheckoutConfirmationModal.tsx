@@ -95,7 +95,7 @@ export const CheckoutConfirmationModal = ({ isModalOpen, setIsModalOpen, cart }:
       onOk={form.handleSubmit(onSubmit)}
       okText='Confirm checkout'
       onCancel={() => setIsModalOpen(false)}>
-      {!!memoTable && (
+      {!!memoTable && memoTable.length > 0 && (
         <FormProvider {...form}>
           <div className='modal-body w-full my-5'>
             <label className='inline-block text-sm font-bold mb-1'>Table number</label>
