@@ -35,8 +35,8 @@ const LoginModal = ({ onClose }: ModalProps) => {
 
   const form = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'uyen@gmail.com',
+      password: 'pasword123',
     },
     resolver: yupResolver(schema),
   });
