@@ -4,6 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const dns = require('dns');
 const connectDB = require('./config/db');
 
 var productRouter = require('./routes/product');
@@ -14,6 +15,7 @@ var orderRouter = require('./routes/order');
 var tableRouter = require('./routes/table');
 
 // Connect to databse
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 connectDB();
 
 var app = express();

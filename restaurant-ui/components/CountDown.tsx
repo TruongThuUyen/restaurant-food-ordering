@@ -1,25 +1,21 @@
 'use client';
-import { useState } from 'react';
 import Countdown from 'react-countdown';
 
-// Countdown time before order closes
-const getNextClosingTime = () => {
-  const now = new Date();
-  const closingTime = new Date();
-  closingTime.setHours(21, 0, 0, 0);
-
-  if (now.getTime() >= closingTime.getTime()) {
-    closingTime.setDate(closingTime.getDate() + 1);
-  }
-  return closingTime;
+type ScheduleState = {
+  isOpen: boolean;
+  nextTime: Date;
 };
 
-const CountDown = () => {
-  const [target, setTarget] = useState(getNextClosingTime());
+type CountDownProps = {
+  target: ScheduleState;
+  setTarget: React.Dispatch<React.SetStateAction<ScheduleState>>;
+  getNextClosingTime: () => ScheduleState;
+};
 
+const CountDown = ({ target, setTarget, getNextClosingTime }: CountDownProps) => {
   return (
     <Countdown
-      date={target}
+      date={target.nextTime}
       onComplete={() => setTarget(getNextClosingTime())}
       className='text-yellow-300 font-bold text-5xl '
     />
