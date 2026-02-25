@@ -1,0 +1,12 @@
+{
+    "navbar": {
+        "home": "Home",
+        "menu": "Menu",
+        "contact": "Contact",
+        "orders": "Orders",
+        "login": "Login",
+        "logout": "Logout",
+        "phone": "123 456 78",
+        "brand": "Massimo"
+    }
+}

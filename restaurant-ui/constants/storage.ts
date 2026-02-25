@@ -1,0 +1,8 @@
+const STORAGE_KEY = {
+  LANGUAGE_COOKIE_NAME: 'locale',
+  USER_TOKEN: 'USER_TOKEN',
+  USER_CART: 'USER_CART',
+  USER_INFO: 'USER_INFO',
+};
+
+export { STORAGE_KEY };

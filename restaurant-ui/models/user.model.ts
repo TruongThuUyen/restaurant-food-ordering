@@ -1,10 +1,19 @@
 export type UserRole = 'user' | 'admin' | 'moderator';
+// LANGUAGE
 
 export interface IUser {
   _id: string;
   email: string;
   password: string;
-  city: string;
+  city?: string;
+  language: {
+    id: string;
+    label: string;
+  };
+  branch: {
+    id: string;
+    label: string;
+  };
   address: string;
 
   fullName: string;

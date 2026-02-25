@@ -1,0 +1,12 @@
+{
+    "navbar": {
+        "home": "Trang chủ",
+        "menu": "Thực đơn",
+        "contact": "Liên hệ",
+        "orders": "Đơn hàng",
+        "login": "Đăng nhập",
+        "logout": "Đăng xuất",
+        "phone": "123 456 78",
+        "brand": "Massimo"
+    }
+}

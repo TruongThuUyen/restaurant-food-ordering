@@ -1,15 +1,18 @@
 'use client';
 import Image from 'next/image';
 
+import { STORAGE_KEY } from '@/constants/storage';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
-import { removeSessionStorage, STORAGE } from '@/utils/storage';
+import { removeSessionStorage } from '@/utils/storage_actions';
+import { useUser } from '@/utils/useUser';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
+import { LanguageToggleButton } from './button/toggle/LanguageButton';
 import CartIcon from './CartIcon';
 import Menu from './Menu';
-import { useUser } from '@/utils/useUser';
 
 function subscribe() {
   return () => {};
@@ -17,17 +20,18 @@ function subscribe() {
 
 function getSnapshot() {
   if (typeof window === 'undefined') return null;
-  return sessionStorage.getItem(STORAGE.USER_TOKEN);
+  return sessionStorage.getItem(STORAGE_KEY.USER_TOKEN);
 }
 
-const Navbar = () => {
+const Navbar = ({ locale }: { locale?: string }) => {
   const user = useSyncExternalStore(subscribe, getSnapshot, () => null);
   const router = useRouter();
   const { notify } = useNotify();
   const { setUserProfile } = useUser();
+  const t = useTranslations('navbar');
 
   const handleLogout = () => {
-    removeSessionStorage(STORAGE.USER_TOKEN);
+    removeSessionStorage(STORAGE_KEY.USER_TOKEN);
     setUserProfile(null);
     notify('Logout sucessfully', 'success');
     setTimeout(() => {
@@ -37,6 +41,11 @@ const Navbar = () => {
 
   return (
     <div className='h-12 text-red-500 p-4 flex items-center justify-between border-b-2 border-b-red-500 uppercase md:h-24 lg:px-20 xl:px-40'>
+      {/* LANGUAGE TOGGLE BUTTON */}
+      <div className='md:hidden'>
+        <LanguageToggleButton locale={locale} />
+      </div>
+
       {/* LEFT LINK */}
       <div className='hidden md:flex gap-4'>
         <Link href={RoutesName.HOME}>Home</Link>
@@ -59,7 +68,7 @@ const Navbar = () => {
           <span>123 456 78</span>
         </div>
         {!user ? (
-          <Link href={RoutesName.LOGIN}>Login</Link>
+          <Link href={RoutesName.LOGIN}>{t('login')}</Link>
         ) : (
           <Link href={RoutesName.ORDER}>Orders</Link>
         )}
@@ -72,6 +81,10 @@ const Navbar = () => {
         ) : (
           ''
         )}
+      </div>
+
+      <div className='hidden md:block mx-4'>
+        <LanguageToggleButton locale={locale} />
       </div>
     </div>
   );

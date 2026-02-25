@@ -1,7 +1,8 @@
 'use client';
 import { getProfile } from '@/api/auth';
+import { STORAGE_KEY } from '@/constants/storage';
 import { IUser } from '@/models/user.model';
-import { getSessionStorage, STORAGE } from '@/utils/storage';
+import { getSessionStorage } from '@/utils/storage_actions';
 import { createContext, ReactNode, useEffect, useState } from 'react';
 
 interface UserContextType {
@@ -13,7 +14,7 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [userProfile, setUserProfile] = useState<IUser | null>(null);
-  const token = getSessionStorage(STORAGE.USER_TOKEN);
+  const token = getSessionStorage(STORAGE_KEY.USER_TOKEN);
 
   useEffect(() => {
     if (!token) return;

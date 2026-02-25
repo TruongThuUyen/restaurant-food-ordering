@@ -1,10 +1,11 @@
 import { ICart, ICartRequest, ItemProduct } from '@/models/cart.model';
 import { IProduct, ProductSize } from '@/models/product.model';
 import { IUser } from '@/models/user.model';
-import { getSessionStorage, setSessionStorage, STORAGE } from './storage';
+import { getSessionStorage, setSessionStorage } from './storage_actions';
 import { mergeCart } from './mergeCarts';
 import { getErrorMessage } from './errorHandle';
 import { getFinalPrice, subTotal, totalCost } from './functions';
+import { STORAGE_KEY } from '@/constants/storage';
 
 export type CartAddItemParams = {
   product: IProduct;
@@ -14,7 +15,7 @@ export type CartAddItemParams = {
   notify: (
     message: string,
     type: 'success' | 'error' | 'warning' | 'info',
-    duration?: number
+    duration?: number,
   ) => void;
 };
 
@@ -25,8 +26,8 @@ export const addItemToCartAction = async ({
   userProfile,
   notify,
 }: CartAddItemParams) => {
-  const userToken = getSessionStorage(STORAGE.USER_TOKEN);
-  const userCart = getSessionStorage(STORAGE.USER_CART);
+  const userToken = getSessionStorage(STORAGE_KEY.USER_TOKEN);
+  const userCart = getSessionStorage(STORAGE_KEY.USER_CART);
 
   const cartItem: ItemProduct = {
     foodName: product.foodName,
@@ -70,7 +71,7 @@ export const addItemToCartAction = async ({
     if (userCart) {
       carts = JSON.parse(userCart);
       const index = carts.items.findIndex(
-        (item) => item.productId === cartItem.productId && item.size === size
+        (item) => item.productId === cartItem.productId && item.size === size,
       );
 
       if (index !== -1) {
@@ -89,7 +90,7 @@ export const addItemToCartAction = async ({
     carts.serviceCost = 0;
     carts.subTotal = subTotal(carts.items);
     carts.totalCost = totalCost(carts.subTotal, carts.deliveryCost, carts.serviceCost);
-    setSessionStorage(STORAGE.USER_CART, JSON.stringify(carts));
+    setSessionStorage(STORAGE_KEY.USER_CART, JSON.stringify(carts));
   }
 
   return 1;

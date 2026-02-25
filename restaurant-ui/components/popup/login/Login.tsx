@@ -3,6 +3,7 @@ import { login } from '@/api/auth';
 import schema from '@/app/(auth)/login/schema';
 import FieldError from '@/components/field/error/FieldError';
 import { FieldInput } from '@/components/field/input/FieldInput';
+import { STORAGE_KEY } from '@/constants/storage';
 import { ICartRequest, ItemProduct } from '@/models/cart.model';
 import { ILogin } from '@/models/user.model';
 import { useNotify } from '@/providers/NotifyProvider';
@@ -13,8 +14,7 @@ import {
   getSessionStorage,
   removeSessionStorage,
   setSessionStorage,
-  STORAGE,
-} from '@/utils/storage';
+} from '@/utils/storage_actions';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { EyeClosed, EyeIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -51,7 +51,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
       },
       {
         once: true,
-      }
+      },
     );
   };
 
@@ -60,14 +60,14 @@ const LoginModal = ({ onClose }: ModalProps) => {
       const response = await login(data);
       if (response.status === 2000) {
         notify('Login successfully', 'success');
-        setSessionStorage(STORAGE.USER_TOKEN, response.data.token);
+        setSessionStorage(STORAGE_KEY.USER_TOKEN, response.data.token);
         setTimeout(() => {
           router.push(RoutesName.HOME);
         }, 2000);
       }
 
       /* --------- GET CART FROM SESSION STORAGE ----------- */
-      const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
+      const cartFromStorage = getSessionStorage(STORAGE_KEY.USER_CART);
       if (!!cartFromStorage) {
         const cartData = JSON.parse(cartFromStorage);
 
@@ -83,7 +83,7 @@ const LoginModal = ({ onClose }: ModalProps) => {
 
         if (cartMerged.status === 0) notify('Fail when fetch cart. Please try again!', 'error');
         else {
-          removeSessionStorage(STORAGE.USER_CART);
+          removeSessionStorage(STORAGE_KEY.USER_CART);
         }
       }
     } catch (error) {

@@ -1,8 +1,8 @@
 'use client';
 import { addToCart, decreaseItemQuantity, getCartByUserId, removeItem } from '@/api/cart';
 import { CheckoutConfirmationModal } from '@/components/popup/cart/CheckoutConfirmationModal';
+import { STORAGE_KEY } from '@/constants/storage';
 import { ICart, ItemProduct } from '@/models/cart.model';
-import { IResponseError } from '@/models/response.model';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { getErrorMessage } from '@/utils/errorHandle';
@@ -11,10 +11,8 @@ import {
   getSessionStorage,
   removeSessionStorage,
   setSessionStorage,
-  STORAGE,
-} from '@/utils/storage';
+} from '@/utils/storage_actions';
 import { useUser } from '@/utils/useUser';
-import axios from 'axios';
 import { ShoppingCartIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -40,7 +38,7 @@ const CartPage = () => {
   const { userProfile } = useUser();
 
   useEffect(() => {
-    const userCart = getSessionStorage(STORAGE.USER_CART);
+    const userCart = getSessionStorage(STORAGE_KEY.USER_CART);
     if (userCart) {
       Promise.resolve().then(() => {
         setCart(JSON.parse(userCart));
@@ -107,12 +105,12 @@ const CartPage = () => {
       }
     } else {
       // Remove item in storage
-      const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
+      const cartFromStorage = getSessionStorage(STORAGE_KEY.USER_CART);
       if (cartFromStorage) {
         const cart: ICart = JSON.parse(cartFromStorage);
 
         const index = cart.items.findIndex(
-          (item) => item.productId === product.productId && item.size === product.size
+          (item) => item.productId === product.productId && item.size === product.size,
         );
         if (index !== -1) {
           if (add) {
@@ -126,13 +124,13 @@ const CartPage = () => {
           }
           // If items in cart is empty -> remove cart
           if (cart.items.length === 0) {
-            removeSessionStorage(STORAGE.USER_CART);
+            removeSessionStorage(STORAGE_KEY.USER_CART);
           } else {
             cart.subTotal = cart.items.reduce((total, product) => {
               return total + product.price * product.quantity;
             }, 0);
             cart.totalCost = totalCost(cart.subTotal, cart.deliveryCost, cart.serviceCost);
-            setSessionStorage(STORAGE.USER_CART, JSON.stringify(cart));
+            setSessionStorage(STORAGE_KEY.USER_CART, JSON.stringify(cart));
           }
           setCart(cart);
         } else {
@@ -159,11 +157,11 @@ const CartPage = () => {
         notify(`${getErrorMessage(error)}\nPlease try again!`, 'error');
       }
     } else {
-      const cartFromStorage = getSessionStorage(STORAGE.USER_CART);
+      const cartFromStorage = getSessionStorage(STORAGE_KEY.USER_CART);
       if (cartFromStorage) {
         const cart = JSON.parse(cartFromStorage) as ICart;
         const index = cart.items.findIndex(
-          (item) => item.productId === productId && item.size === productSize
+          (item) => item.productId === productId && item.size === productSize,
         );
         if (index !== -1) {
           cart.items.splice(index, 1);
@@ -173,13 +171,13 @@ const CartPage = () => {
 
         // If items in cart is empty -> remove cart
         if (cart.items.length === 0) {
-          removeSessionStorage(STORAGE.USER_CART);
+          removeSessionStorage(STORAGE_KEY.USER_CART);
         } else {
           cart.subTotal = cart.items.reduce((total, product) => {
             return total + product.price * product.quantity;
           }, 0);
           cart.totalCost = totalCost(cart.subTotal, cart.deliveryCost, cart.serviceCost);
-          setSessionStorage(STORAGE.USER_CART, JSON.stringify(cart));
+          setSessionStorage(STORAGE_KEY.USER_CART, JSON.stringify(cart));
         }
         setCart(cart);
       }

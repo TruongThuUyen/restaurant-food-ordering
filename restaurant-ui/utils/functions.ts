@@ -30,4 +30,20 @@ const formatDate = (isoDate: Date) => {
   return formatDateTime;
 };
 
-export { subTotal, totalCost, getFinalPrice, formatDate };
+const setCookie = (name: string, value: string, days: number) => {
+  const maxAge = days * 24 * 60 * 60; // Convert days to seconds
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax; ${window.location.protocol === 'https:' ? 'Secure' : ''}`;
+};
+
+const getCookie = (name: string) => {
+  return document.cookie
+    .split('; ')
+    .find((row) => row.startsWith(name + '='))
+    ?.split('=')[1];
+};
+
+const clearCookie = (name: string) => {
+  document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax; ${window.location.protocol === 'https:' ? 'Secure' : ''}`;
+};
+
+export { subTotal, totalCost, getFinalPrice, formatDate, setCookie, getCookie, clearCookie };

@@ -1,12 +1,13 @@
 'use client';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
-import { removeSessionStorage, STORAGE } from '@/utils/storage';
+import { removeSessionStorage } from '@/utils/storage_actions';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useSyncExternalStore } from 'react';
 import CartIcon from './CartIcon';
+import { STORAGE_KEY } from '@/constants/storage';
 
 const links = [
   {
@@ -37,7 +38,7 @@ function subscribe() {
 
 function getSnapshot() {
   if (typeof window === 'undefined') return null;
-  return sessionStorage.getItem(STORAGE.USER_TOKEN);
+  return sessionStorage.getItem(STORAGE_KEY.USER_TOKEN);
 }
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,7 @@ const Menu = () => {
   const user = useSyncExternalStore(subscribe, getSnapshot, () => null);
 
   const handleLogout = () => {
-    removeSessionStorage(STORAGE.USER_TOKEN);
+    removeSessionStorage(STORAGE_KEY.USER_TOKEN);
     notify('Logout sucessfully', 'success');
     setOpen(false);
     setTimeout(() => {
