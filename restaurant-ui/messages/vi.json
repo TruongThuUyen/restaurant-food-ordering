@@ -7,6 +7,47 @@
         "login": "Đăng nhập",
         "logout": "Đăng xuất",
         "phone": "123 456 78",
-        "brand": "Massimo"
+        "brand": "Massimo",
+        "cart": "Giỏ hàng",
+        "working hours": "Giờ làm việc"
+    },
+    "slider": {
+        "slider1": {
+            "title": "Luôn tươi ngon – giòn rụm – nóng hổi"
+        },
+        "slider2": {
+            "title": "Chúng tôi giao hàng đến bạn ở bất cứ đâu!"
+        },
+        "slider3": {
+            "title": "Chiếc pizza ngon nhất để chia sẻ cùng gia đình bạn"
+        }
+    },
+    "button": {
+        "order": {
+            "now": "Đặt hàng ngay",
+            "disbaled": "Đặt hàng đã đóng"
+        },
+        "checkout": "Thanh toán",
+        "returnToShop": "Quay lại mua hàng"
+    },
+    "offer": {
+        "title": "Burger ngon tuyệt kèm khoai tây chiên giòn rụm",
+        "subtitle": "Không ngừng tối ưu trải nghiệm và quy trình phục vụ để mang đến sự tiện lợi tối đa cho khách hàng. Luôn đổi mới để phục vụ bạn nhanh chóng và hiệu quả hơn."
+    },
+    "cart": {
+        "product": "Sản phẩm",
+        "price": "Giá",
+        "quantity": "Số lượng",
+        "total": "Tổng cộng",
+        "subtotal": "Tạm tính",
+        "items": "sản phẩm",
+        "serviceCost": "Phí dịch vụ",
+        "deliveryCost": "Phí giao hàng",
+        "inclVat": "Đã bao gồm VAT",
+        "empty": {
+            "first": "Giỏ hàng của bạn đang",
+            "second": "trống!"
+        },
+        "emptyMessage": "Bạn phải thêm sản phẩm vào giỏ hàng trước khi thanh toán."
     }
 }

@@ -1,5 +1,6 @@
 'client';
 
+import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -35,21 +36,20 @@ const getNextClosingTime = () => {
 };
 
 const Offer = () => {
+  const tOffer = useTranslations('offer');
+  const tButton = useTranslations('button.order');
   const [target, setTarget] = useState(getNextClosingTime());
 
   return (
     <div className="bg-black h-screen flex flex-col md:flex-row md:justify-between md:bg-[url('/offerBg.png')] md:h-[70vh]">
       {/* TEXT CONTAINER */}
       <div className='flex-1 flex flex-col justify-center items-center text-center gap-8 p-6'>
-        <h1 className='text-white text-5xl font-bold xl:text-6xl'>Delicious Burger & French Fry</h1>
-        <p className='text-white xl:text-xl'>
-          Progressively simplify effective e-toilers and process-centric methods of empowerment.
-          Quickly pontificate parallel.
-        </p>
+        <h1 className='text-white text-5xl font-bold xl:text-6xl'>{tOffer('title')}</h1>
+        <p className='text-white xl:text-xl'>{tOffer('subtitle')}</p>
         <CountDown target={target} setTarget={setTarget} getNextClosingTime={getNextClosingTime} />
         {target.isOpen ? (
           <button className='bg-red-500 text-white rounded-md py-3 px-6 cursor-pointer'>
-            Order Now
+            {tButton('now')}
           </button>
         ) : (
           <button
@@ -58,7 +58,7 @@ const Offer = () => {
               disabled:bg-red-300
               disabled:cursor-not-allowed
               disabled:opacity-80'>
-            Ordering is closed — reopens at 8:00 AM
+            {tButton('disbaled')}
           </button>
         )}
       </div>

@@ -1,36 +1,15 @@
 'use client';
+import { navLinks } from '@/constants/constant';
+import { STORAGE_KEY } from '@/constants/storage';
 import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { removeSessionStorage } from '@/utils/storage_actions';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useSyncExternalStore } from 'react';
 import CartIcon from './CartIcon';
-import { STORAGE_KEY } from '@/constants/storage';
-
-const links = [
-  {
-    id: 1,
-    title: 'HomePage',
-    url: RoutesName.HOME,
-  },
-  {
-    id: 2,
-    title: 'Menu',
-    url: RoutesName.MENU,
-  },
-  {
-    id: 3,
-    title: 'Working Hourse',
-    url: RoutesName.HOME,
-  },
-  {
-    id: 4,
-    title: 'Contact',
-    url: RoutesName.CONTACT,
-  },
-];
 
 function subscribe() {
   return () => {};
@@ -45,6 +24,7 @@ const Menu = () => {
   const router = useRouter();
   const { notify } = useNotify();
   const user = useSyncExternalStore(subscribe, getSnapshot, () => null);
+  const t = useTranslations('navbar');
 
   const handleLogout = () => {
     removeSessionStorage(STORAGE_KEY.USER_TOKEN);
@@ -81,24 +61,24 @@ const Menu = () => {
          transition-all duration-500 ease-in-out overflow-hidden
           ${open ? 'h-[calc(100vh-6rem)] opacity-100' : 'h-0 opacity-0'}
         `}>
-        {links?.map((item) => (
+        {navLinks?.map((item) => (
           <Link href={item.url} key={item.id} onClick={() => setOpen(false)}>
-            {item.title}
+            {t(item.title)}
           </Link>
         ))}
         {!user ? (
           <Link href={RoutesName.LOGIN} onClick={() => setOpen(false)}>
-            Login
+            {t('login')}
           </Link>
         ) : (
           <Link href={RoutesName.ORDER} onClick={() => setOpen(false)}>
-            Orders
+            {t('orders')}
           </Link>
         )}
         <CartIcon onClose={() => setOpen(false)} />
         {user ? (
           <button onClick={() => handleLogout()} className='uppercase cursor-pointer'>
-            Logout
+            {t('logout')}
           </button>
         ) : (
           ''

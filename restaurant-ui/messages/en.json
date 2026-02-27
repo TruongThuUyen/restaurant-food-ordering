@@ -7,6 +7,48 @@
         "login": "Login",
         "logout": "Logout",
         "phone": "123 456 78",
-        "brand": "Massimo"
+        "brand": "Massimo",
+        "cart": "Cart",
+        "working hours": "Working Hours"
+    },
+    "slider": {
+        "slider1": {
+            "title": "always fresh & always crispy & always hotu"
+        },
+        "slider2": {
+            "title": "we deliver your order wherever!"
+        },
+        "slider3": {
+            "title": "the best pizza to share with your family"
+        }
+    },
+    "button": {
+        "order": {
+            "now": "Order Now",
+            "disabled": "Order is Disabled"
+        },
+        "checkout": "Checkout",
+        "returnToShop": "Return to shop"
+    },
+    "offer": {
+        "title": "Delicious Burger & French Fry",
+        "subtitle": "Progressively simplify effective e-toilers and process-centric methods of empowerment. Quickly pontificate parallel."
+    },
+    "cart": {
+        "product": "Product",
+        "price": "Price",
+        "quantity": "Quantity",
+        "total": "Total",
+        "subtotal": "Subtotal",
+        "items": "items",
+        "serviceCost": "Service Cost",
+        "deliveryCost": "Delivery Cost",
+        "inclVat": "Incl. VAT",
+        "checkout": "Checkout",
+        "empty": {
+            "first": "Your cart is",
+            "second": "empty!"
+        },
+        "emptyMessage": "You must add items to the cart before proceeding to checkout."
     }
 }

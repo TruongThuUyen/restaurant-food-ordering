@@ -4,11 +4,9 @@ import { NotifyProvider } from '@/providers/NotifyProvider';
 import { UserProvider } from '@/providers/UserProvider';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { cookies } from 'next/headers';
 import '../globals.css';
-
-// import {} from "@/messages/en.json"
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,7 +28,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = (await cookies()).get('locale')?.value || 'en';
+  const locale = await getLocale();
 
   return (
     <html lang={locale}>
@@ -38,7 +36,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <UserProvider>
             <NotifyProvider>
-              <Navbar locale={locale} />
+              <Navbar />
               {children}
             </NotifyProvider>
             <Footer />

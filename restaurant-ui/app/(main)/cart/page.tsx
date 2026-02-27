@@ -14,6 +14,7 @@ import {
 } from '@/utils/storage_actions';
 import { useUser } from '@/utils/useUser';
 import { ShoppingCartIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -36,6 +37,8 @@ const CartPage = () => {
   const router = useRouter();
   const { notify } = useNotify();
   const { userProfile } = useUser();
+  const tCart = useTranslations('cart');
+  const tButton = useTranslations('button');
 
   useEffect(() => {
     const userCart = getSessionStorage(STORAGE_KEY.USER_CART);
@@ -191,11 +194,11 @@ const CartPage = () => {
           {/* PRODUCT CONTAINER */}
           <div className='h-[calc(100vh/2)] px-4 py-4 flex flex-col justify-center lg:h-[calc(100vh*2/3)] lg:w-2/3 lg:px-18 xl:px-26'>
             <div className='grid grid-cols-8 gap-4 items-center font-bold text-red-500 text-lg border-b py-3'>
-              <span>Product</span>
-              <span className='col-span-3 ml-7 sm:ml-3'>Food Name</span>
-              <span className='text-center'>Qty</span>
-              <span>Price</span>
-              <span>Total</span>
+              <span></span>
+              <span className='col-span-3 ml-7 sm:ml-3'>{tCart('product')}</span>
+              <span className='text-center'>{tCart('quantity')}</span>
+              <span>{tCart('price')}</span>
+              <span>{tCart('total')}</span>
               <span></span>
               <span></span>
             </div>
@@ -245,15 +248,17 @@ const CartPage = () => {
           {/* PAYMENT CONTAINER */}
           <div className='px-4 py-6 bg-fuchsia-100 flex flex-col gap-4 justify-center w-full lg:w-1/3 xl:px-26 2xl:text-xl 2xl:gap-6'>
             <div className='flex justify-between'>
-              <span className=''>Subtotal ({cart.items.length} items)</span>
+              <span className=''>
+                {tCart('subtotal')} ({cart.items.length} {tCart('items')})
+              </span>
               <span className=''>${cart.subTotal.toFixed(2)}</span>
             </div>
             <div className='flex justify-between'>
-              <span className=''>Service Cost </span>
+              <span className=''>{tCart('serviceCost')}</span>
               <span className=''>$0.00</span>
             </div>
             <div className='flex justify-between'>
-              <span className=''> Delivery Cost</span>
+              <span className=''>{tCart('deliveryCost')}</span>
               <span className='text-green-500'>
                 {cart.deliveryCost > 0 ? cart.deliveryCost : 'FREE!'}
               </span>
@@ -261,13 +266,15 @@ const CartPage = () => {
             <hr className='my-2 ' />
 
             <div className='flex justify-between'>
-              <span className='uppercase text-xl'> Total(incl vat)</span>
+              <span className='uppercase text-xl'>
+                {tCart('total')} ({tCart('inclVat')})
+              </span>
               <span className='text-red-500 font-bold'>{cart.totalCost.toFixed(2)}</span>
             </div>
             <button
               onClick={() => checkout()}
-              className='bg-red-500 text-white text-base py-[6px] px-3 rounded-md w-1/2 self-end cursor-pointer hover:bg-red-600'>
-              CHECKOUT
+              className='bg-red-500 text-white text-base py-1.5 px-3 rounded-md w-1/2 self-end cursor-pointer uppercase hover:bg-red-600'>
+              {tButton('checkout')}
             </button>
           </div>
         </div>
@@ -278,11 +285,12 @@ const CartPage = () => {
           </div>
 
           <h2 className='text-2xl sm:text-3xl font-medium text-black'>
-            Your cart is <span className='capitalize text-red-600'>empty!</span>
+            {tCart('empty.first')}{' '}
+            <span className='capitalize text-red-600'>{tCart('empty.second')}</span>
           </h2>
-          <p className='text-center'>Must add items on the cart before you proceed to checkout.</p>
+          <p className='text-center'>{tCart('emptyMessage')}</p>
           <button className='px-6 py-2 text-sm bg-red-500 hover:bg-red-600 rounded-xl text-white cursor-pointer'>
-            <Link href={RoutesName.HOME}>Return to shop</Link>
+            <Link href={RoutesName.HOME}>{tButton('returnToShop')}</Link>
           </button>
         </div>
       )}

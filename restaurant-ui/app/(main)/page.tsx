@@ -32,7 +32,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
+    <main className='overflow-hidden'>
       <Slider />
       <Featured products={products} />
       <Offer />

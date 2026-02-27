@@ -6,7 +6,7 @@ import { useNotify } from '@/providers/NotifyProvider';
 import { RoutesName } from '@/routes/contanst';
 import { removeSessionStorage } from '@/utils/storage_actions';
 import { useUser } from '@/utils/useUser';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
@@ -23,12 +23,13 @@ function getSnapshot() {
   return sessionStorage.getItem(STORAGE_KEY.USER_TOKEN);
 }
 
-const Navbar = ({ locale }: { locale?: string }) => {
+const Navbar = () => {
   const user = useSyncExternalStore(subscribe, getSnapshot, () => null);
   const router = useRouter();
   const { notify } = useNotify();
   const { setUserProfile } = useUser();
   const t = useTranslations('navbar');
+  const locale = useLocale();
 
   const handleLogout = () => {
     removeSessionStorage(STORAGE_KEY.USER_TOKEN);
@@ -41,16 +42,21 @@ const Navbar = ({ locale }: { locale?: string }) => {
 
   return (
     <div className='h-12 text-red-500 p-4 flex items-center justify-between border-b-2 border-b-red-500 uppercase md:h-24 lg:px-20 xl:px-40'>
-      {/* LANGUAGE TOGGLE BUTTON */}
+      {/* LANGUAGE TOGGLE BUTTON - DESKTOP*/}
+      <div className='hidden md:flex items-center justify-center fixed top-5 left-4 bg-white px-2 py-2.5 rounded-md shadow-elevation-1'>
+        <LanguageToggleButton locale={locale} />
+      </div>
+
+      {/* LANGUAGE TOGGLE BUTTON - MOBILE*/}
       <div className='md:hidden'>
         <LanguageToggleButton locale={locale} />
       </div>
 
       {/* LEFT LINK */}
       <div className='hidden md:flex gap-4'>
-        <Link href={RoutesName.HOME}>Home</Link>
-        <Link href={RoutesName.MENU}>Menu</Link>
-        <Link href={RoutesName.CONTACT}>Contact</Link>
+        <Link href={RoutesName.HOME}>{t('home')}</Link>
+        <Link href={RoutesName.MENU}>{t('menu')}</Link>
+        <Link href={RoutesName.CONTACT}>{t('contact')}</Link>
       </div>
       {/* LOGO */}
       <div className='text-xl md:font-bold flex-1 text-center'>
@@ -70,21 +76,17 @@ const Navbar = ({ locale }: { locale?: string }) => {
         {!user ? (
           <Link href={RoutesName.LOGIN}>{t('login')}</Link>
         ) : (
-          <Link href={RoutesName.ORDER}>Orders</Link>
+          <Link href={RoutesName.ORDER}>{t('orders')}</Link>
         )}
         <CartIcon />
 
         {user ? (
           <button onClick={() => handleLogout()} className='uppercase cursor-pointer'>
-            Logout
+            {t('logout')}
           </button>
         ) : (
           ''
         )}
-      </div>
-
-      <div className='hidden md:block mx-4'>
-        <LanguageToggleButton locale={locale} />
       </div>
     </div>
   );
