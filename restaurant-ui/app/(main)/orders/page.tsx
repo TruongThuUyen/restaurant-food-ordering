@@ -62,7 +62,7 @@ const OrdersPage = () => {
                 }}
                 key={order._id}
                 className={`grid grid-cols-4 md:grid-cols-9 divide-x-1 divide-gray-200 text-center items-stretch even:bg-[#f5e6e3] cursor-pointer`}>
-                <span className='h-full flex items-center justify-center py-3 px-[6px]'>
+                <span className='h-full flex items-center justify-center py-3 px-2.5'>
                   {order.orderId}
                 </span>
                 <span className='h-full flex items-center justify-center py-3 px-[6px]'>
@@ -85,9 +85,8 @@ const OrdersPage = () => {
                 <div className='h-full flex items-center justify-center font-medium py-3 px-[6px]'>
                   <span
                     className={`flex items-center justify-center px-3 py-1 rounded-2xl 
-                      ${ORDER_STATUS_MAP[order.status].background} ${
-                      ORDER_STATUS_MAP[order.status].color
-                    }`}>
+                      ${ORDER_STATUS_MAP[order.status].background} ${ORDER_STATUS_MAP[order.status].color
+                      }`}>
                     {order.status}
                   </span>
                 </div>
