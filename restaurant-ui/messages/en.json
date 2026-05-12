@@ -28,7 +28,10 @@
             "disabled": "Order is Disabled"
         },
         "checkout": "Checkout",
-        "returnToShop": "Return to shop"
+        "returnToShop": "Return to shop",
+        "signIn": "Sign In",
+        "signUp": "Sign Up",
+        "backHome": "Back home"
     },
     "offer": {
         "title": "Delicious Burger & French Fry",
@@ -50,5 +53,16 @@
             "second": "empty!"
         },
         "emptyMessage": "You must add items to the cart before proceeding to checkout."
+    },
+    "auth": {
+        "welcome": "Welcome",
+        "description": "Log into your account or create a new one using social buttons",
+        "or": "OR",
+        "haveProblem": "Have a problem?",
+        "contactUs": "Contact us",
+        "getStartedPrefix": "Let's get",
+        "getStartedHighlight": "started",
+        "email": "Email address",
+        "password": "Password"
     }
 }

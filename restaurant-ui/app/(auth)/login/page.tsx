@@ -2,6 +2,7 @@
 import LoginModal from '@/components/popup/login/Login';
 import { RoutesName } from '@/routes/contanst';
 import { LogInIcon, UserPlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -10,6 +11,8 @@ import { useState } from 'react';
 const LoginPage = () => {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const tAuth = useTranslations('auth');
+  const tButton = useTranslations('button');
 
   return (
     <div className='p-4 h-[calc(100vh-6rem)] md:h-[calc(100vh-9rem)] flex items-center justify-center'>
@@ -21,17 +24,17 @@ const LoginPage = () => {
         </div>
         {/* FORM CONTAINER */}
         <div className='p-10 flex flex-col gap-3 md:gap-5 md:w-1/2'>
-          <h1 className='font-bold text-xl xl:text-3xl'>Welcome</h1>
-          <p>Log into your account or create a new one using social buttons</p>
+          <h1 className='font-bold text-xl xl:text-3xl'>{tAuth('welcome')}</h1>
+          <p>{tAuth('description')}</p>
           <button
             onClick={() => setShowModal(true)}
             className='flex gap-3 py-[10px] px-4 bg-[#020c4a] hover:bg-[#0b1e78] text-white rounded-3xl justify-center items-center cursor-pointer'>
             <LogInIcon className='size-5' />
-            <span>Sign in</span>
+            <span>{tButton('signIn')}</span>
           </button>
           <div className='flex items-center'>
             <span className='inline-block h-[1px] bg-gray-200 w-full'></span>
-            <span className='inline-block px-4'>OR</span>
+            <span className='inline-block px-4'>{tAuth('or')}</span>
             <span className='inline-block h-[1px] bg-gray-200 w-full'></span>
           </div>
           <button
@@ -40,18 +43,18 @@ const LoginPage = () => {
             }}
             className='flex gap-3 py-[10px] px-4 bg-(--color-red) hover:bg-(--color-red-hover) text-white rounded-3xl justify-center items-center cursor-pointer'>
             <UserPlus className='size-5' />
-            <span>Sign up</span>
+            <span>{tButton('signUp')}</span>
           </button>
           <p className='text-sm mt-2'>
-            Have a problem?
+            {tAuth('haveProblem')}
             <Link className='underline mx-2' href='#'>
-              Contact us
+              {tAuth('contactUs')}
             </Link>
           </p>
           <Link
             href={RoutesName.HOME}
             className='flex gap-1 justify-center items-center text-sm underline text-cyan-800'>
-            <span>Back home</span>
+            <span>{tButton('backHome')}</span>
           </Link>
         </div>
       </div>

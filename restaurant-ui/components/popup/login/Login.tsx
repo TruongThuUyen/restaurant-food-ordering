@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import './styled.css';
+import { useTranslations } from 'next-intl';
 
 type ModalProps = {
   onClose: (value: boolean) => void;

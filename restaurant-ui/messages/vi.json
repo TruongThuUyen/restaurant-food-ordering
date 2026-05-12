@@ -28,7 +28,10 @@
             "disbaled": "Đặt hàng đã đóng"
         },
         "checkout": "Thanh toán",
-        "returnToShop": "Quay lại mua hàng"
+        "returnToShop": "Quay lại mua hàng",
+        "signIn": "Đăng nhập",
+        "signUp": "Đăng ký",
+        "backHome": "Về trang chủ"
     },
     "offer": {
         "title": "Burger ngon tuyệt kèm khoai tây chiên giòn rụm",
@@ -49,5 +52,16 @@
             "second": "trống!"
         },
         "emptyMessage": "Bạn phải thêm sản phẩm vào giỏ hàng trước khi thanh toán."
+    },
+    "auth": {
+        "welcome": "Chào mừng",
+        "description": "Đăng nhập vào tài khoản của bạn hoặc tạo tài khoản mới bằng các nút mạng xã hội",
+        "or": "HOẶC",
+        "haveProblem": "Gặp vấn đề?",
+        "contactUs": "Liên hệ với chúng tôi",
+        "getStartedPrefix": "Hãy",
+        "getStartedHighlight": "bắt đầu",
+        "email": "Email",
+        "password": "Mật khẩu"
     }
 }

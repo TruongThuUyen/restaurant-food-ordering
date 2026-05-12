@@ -28,10 +28,27 @@ const userSchema = new mongoose.Schema(
       default: Date.now,
     },
 
+    language: {
+      id: {
+        type: Number,
+        ref: 'Language',
+        required: true,
+      },
+    },
+
     city: {
       type: String,
-      required: true,
+      required: false,
     },
+
+    branch: {
+      id: {
+        type: Number,
+        ref: 'Branch',
+        required: true,
+      },
+    },
+
     role: {
       type: String,
       default: 'user',
@@ -43,19 +60,22 @@ const userSchema = new mongoose.Schema(
       type: Date,
       required: false,
     },
+
     phone: {
       type: String,
       required: false,
     },
+
     avatar: {
       type: String,
       required: false,
     },
+
     address: String,
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Hash password before saving

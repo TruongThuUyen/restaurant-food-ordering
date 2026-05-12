@@ -15,6 +15,8 @@ const register = async (req, res) => {
       password,
       email,
       city,
+      language,
+      branch,
       address,
     });
 
